@@ -11,7 +11,6 @@ import {
   User,
   Menu,
   X,
-  Smartphone,
   Settings,
   UserRound,
   LogOut,
@@ -162,6 +161,7 @@ export default function Navbar() {
     { name: t('movies'), href: '/movies' },
     { name: t('tvShows'), href: '/series' },
     { name: t('artists'), href: '/artists' },
+    { name: 'DP Singh Basni', href: '/founder' },
   ];
 
   // ============================================================
@@ -286,19 +286,18 @@ export default function Navbar() {
       ======================================================== */}
 
       <header
-        className={`fixed left-0 right-0 top-0 z-[100] transition-all duration-300 ${
-          isScrolled
-            ? 'glass-nav py-3'
-            : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-5'
-        }`}
+        className={`fixed left-0 right-0 top-0 z-[100] transition-all duration-300 ${isScrolled
+          ? 'glass-nav py-3'
+          : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-5'
+          }`}
       >
-        <div className="mx-auto flex w-full max-w-7xl min-w-0 items-center justify-between gap-2 px-3 sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-[1440px] min-w-0 items-center justify-between gap-2 px-3 sm:px-6 lg:px-8">
 
           {/* ====================================================
               LEFT
           ==================================================== */}
 
-          <div className="flex min-w-0 items-center gap-3 sm:gap-8">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-5 lg:gap-6">
 
             {/* ==================================================
                 LOGO
@@ -308,7 +307,7 @@ export default function Navbar() {
               href="/"
               className="group relative flex shrink-0 items-center gap-2"
             >
-              <div className="relative h-8 w-24 overflow-hidden transition-transform group-hover:scale-105 sm:h-11 sm:w-36">
+              <div className="relative h-8 w-24 shrink-0 overflow-hidden transition-transform group-hover:scale-105 sm:h-10 sm:w-32 lg:h-11 lg:w-36">
                 <Image
                   src="/mayadlogo.jpg"
                   alt="MAYAD Logo"
@@ -325,7 +324,7 @@ export default function Navbar() {
                 DESKTOP NAV
             ================================================== */}
 
-            <nav className="hidden min-w-0 items-center space-x-1 md:flex lg:space-x-2">
+            <nav className="hidden min-w-0 flex-nowrap items-center gap-0.5 md:flex lg:gap-1">
 
               {/* NORMAL LINKS */}
 
@@ -336,11 +335,10 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-white/5 font-semibold text-mayad-gold'
-                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                    }`}
+                    className={`whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors ${isActive
+                      ? 'bg-white/5 font-semibold text-mayad-gold'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -365,18 +363,16 @@ export default function Navbar() {
                   onClick={() =>
                     setCategoryOpen(!categoryOpen)
                   }
-                  className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    isCategoryActive || categoryOpen
-                      ? 'bg-white/5 font-semibold text-mayad-gold'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                  }`}
+                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium transition-colors ${isCategoryActive || categoryOpen
+                    ? 'bg-white/5 font-semibold text-mayad-gold'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                    }`}
                 >
                   <span>Category</span>
 
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      categoryOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`h-4 w-4 transition-transform duration-200 ${categoryOpen ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
 
@@ -423,19 +419,17 @@ export default function Navbar() {
                             onClick={() =>
                               setCategoryOpen(false)
                             }
-                            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
-                              active
-                                ? 'bg-mayad-gold text-black'
-                                : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                            }`}
+                            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all ${active
+                              ? 'bg-mayad-gold text-black'
+                              : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
+                              }`}
                           >
 
                             <Film
-                              className={`h-4 w-4 ${
-                                active
-                                  ? 'text-black'
-                                  : 'text-mayad-gold'
-                              }`}
+                              className={`h-4 w-4 ${active
+                                ? 'text-black'
+                                : 'text-mayad-gold'
+                                }`}
                             />
 
                             <span>
@@ -472,18 +466,16 @@ export default function Navbar() {
                   onClick={() =>
                     setMoreOpen(!moreOpen)
                   }
-                  className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    isMoreActive || moreOpen
-                      ? 'bg-white/5 font-semibold text-mayad-gold'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                  }`}
+                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium transition-colors ${isMoreActive || moreOpen
+                    ? 'bg-white/5 font-semibold text-mayad-gold'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                    }`}
                 >
                   <span>More</span>
 
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      moreOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`h-4 w-4 transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
 
@@ -531,19 +523,17 @@ export default function Navbar() {
                             onClick={() =>
                               setMoreOpen(false)
                             }
-                            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
-                              active
-                                ? 'bg-mayad-gold text-black'
-                                : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                            }`}
+                            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all ${active
+                              ? 'bg-mayad-gold text-black'
+                              : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
+                              }`}
                           >
 
                             <Icon
-                              className={`h-4 w-4 ${
-                                active
-                                  ? 'text-black'
-                                  : 'text-mayad-gold'
-                              }`}
+                              className={`h-4 w-4 ${active
+                                ? 'text-black'
+                                : 'text-mayad-gold'
+                                }`}
                             />
 
                             <span>
@@ -571,7 +561,7 @@ export default function Navbar() {
               RIGHT DESKTOP
           ==================================================== */}
 
-          <div className="hidden shrink-0 items-center gap-4 md:flex">
+          <div className="hidden shrink-0 items-center gap-2 lg:gap-3 md:flex">
 
             {/* ==================================================
                 SEARCH
@@ -595,11 +585,10 @@ export default function Navbar() {
 
               <button
                 onClick={() => setLanguage('ENG')}
-                className={`rounded-full px-3 py-1 transition-all duration-200 ${
-                  language === 'ENG'
-                    ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
-                    : 'text-slate-300 hover:text-white'
-                }`}
+                className={`rounded-full px-3 py-1 transition-all duration-200 ${language === 'ENG'
+                  ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
+                  : 'text-slate-300 hover:text-white'
+                  }`}
                 title="English"
               >
                 ENG
@@ -607,11 +596,10 @@ export default function Navbar() {
 
               <button
                 onClick={() => setLanguage('RAJ')}
-                className={`rounded-full px-3 py-1 transition-all duration-200 ${
-                  language === 'RAJ'
-                    ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
-                    : 'text-slate-300 hover:text-white'
-                }`}
+                className={`rounded-full px-3 py-1 transition-all duration-200 ${language === 'RAJ'
+                  ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
+                  : 'text-slate-300 hover:text-white'
+                  }`}
                 title="राजस्थानी"
               >
                 राजस्थानी
@@ -621,26 +609,12 @@ export default function Navbar() {
 
 
             {/* ==================================================
-                DOWNLOAD APP
-            ================================================== */}
-
-            <a
-              href="#download-app"
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-200 transition-all duration-300 hover:bg-mayad-gold hover:text-black"
-              title={t('downloadApp')}
-              aria-label={t('downloadApp')}
-            >
-              <Smartphone className="h-5 w-5" />
-            </a>
-
-
-            {/* ==================================================
                 SUBSCRIBE
             ================================================== */}
 
             <button
               onClick={openSubscribe}
-              className="flex items-center gap-2 rounded-full bg-gradient-to-r from-mayad-gold to-mayad-goldHover px-4 py-2 text-xs font-bold text-black shadow-glow-gold transition-all hover:brightness-110 sm:text-sm"
+              className="flex shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-mayad-gold to-mayad-goldHover px-3 py-2 text-xs font-bold text-black shadow-glow-gold transition-all hover:brightness-110 sm:text-sm"
             >
               <Crown className="h-4 w-4 fill-current" />
 
@@ -659,7 +633,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white transition-colors hover:text-mayad-gold"
+                className="flex shrink-0 items-center gap-2 px-2 py-2 text-sm font-medium text-white transition-colors hover:text-mayad-gold"
               >
                 <User className="h-4 w-4 text-mayad-gold" />
 
@@ -850,18 +824,6 @@ export default function Navbar() {
             </button>
 
 
-            {/* MOBILE DOWNLOAD */}
-
-            <a
-              href="#download-app"
-              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-200 transition-colors hover:text-mayad-gold min-[400px]:flex"
-              title={t('downloadApp')}
-              aria-label={t('downloadApp')}
-            >
-              <Smartphone className="h-5 w-5" />
-            </a>
-
-
             {/* MOBILE SUBSCRIBE */}
 
             <button
@@ -978,11 +940,10 @@ export default function Navbar() {
                     onClick={() =>
                       setLanguage('ENG')
                     }
-                    className={`rounded-full px-3 py-1 transition-all ${
-                      language === 'ENG'
-                        ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
-                        : 'text-slate-300'
-                    }`}
+                    className={`rounded-full px-3 py-1 transition-all ${language === 'ENG'
+                      ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
+                      : 'text-slate-300'
+                      }`}
                   >
                     ENG
                   </button>
@@ -991,11 +952,10 @@ export default function Navbar() {
                     onClick={() =>
                       setLanguage('RAJ')
                     }
-                    className={`rounded-full px-3 py-1 transition-all ${
-                      language === 'RAJ'
-                        ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
-                        : 'text-slate-300'
-                    }`}
+                    className={`rounded-full px-3 py-1 transition-all ${language === 'RAJ'
+                      ? 'bg-mayad-gold font-extrabold text-black shadow-glow-gold'
+                      : 'text-slate-300'
+                      }`}
                   >
                     राजस्थानी
                   </button>
@@ -1024,11 +984,10 @@ export default function Navbar() {
                       onClick={() =>
                         setMobileMenuOpen(false)
                       }
-                      className={`w-full min-w-0 break-words rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${
-                        isActive
-                          ? 'bg-mayad-gold text-black'
-                          : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
-                      }`}
+                      className={`w-full min-w-0 break-words rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${isActive
+                        ? 'bg-mayad-gold text-black'
+                        : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
+                        }`}
                     >
                       {link.name}
                     </Link>
@@ -1049,12 +1008,11 @@ export default function Navbar() {
                         !mobileCategoryOpen
                       )
                     }
-                    className={`flex w-full min-w-0 items-center justify-between rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${
-                      isCategoryActive ||
+                    className={`flex w-full min-w-0 items-center justify-between rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${isCategoryActive ||
                       mobileCategoryOpen
-                        ? 'bg-white/10 text-mayad-gold'
-                        : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
-                    }`}
+                      ? 'bg-white/10 text-mayad-gold'
+                      : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
+                      }`}
                   >
 
                     <span className="flex min-w-0 items-center gap-2">
@@ -1063,11 +1021,10 @@ export default function Navbar() {
                     </span>
 
                     <ChevronDown
-                      className={`h-5 w-5 transition-transform duration-200 ${
-                        mobileCategoryOpen
-                          ? 'rotate-180'
-                          : ''
-                      }`}
+                      className={`h-5 w-5 transition-transform duration-200 ${mobileCategoryOpen
+                        ? 'rotate-180'
+                        : ''
+                        }`}
                     />
 
                   </button>
@@ -1114,19 +1071,17 @@ export default function Navbar() {
                                     false
                                   );
                                 }}
-                                className={`flex w-full min-w-0 items-center gap-3 px-5 py-3 text-sm font-medium transition-colors ${
-                                  active
-                                    ? 'bg-mayad-gold text-black'
-                                    : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                                }`}
+                                className={`flex w-full min-w-0 items-center gap-3 px-5 py-3 text-sm font-medium transition-colors ${active
+                                  ? 'bg-mayad-gold text-black'
+                                  : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
+                                  }`}
                               >
 
                                 <Film
-                                  className={`h-4 w-4 ${
-                                    active
-                                      ? 'text-black'
-                                      : 'text-mayad-gold'
-                                  }`}
+                                  className={`h-4 w-4 ${active
+                                    ? 'text-black'
+                                    : 'text-mayad-gold'
+                                    }`}
                                 />
 
                                 {category.name}
@@ -1158,12 +1113,11 @@ export default function Navbar() {
                         !mobileMoreOpen
                       )
                     }
-                    className={`flex w-full min-w-0 items-center justify-between rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${
-                      isMoreActive ||
+                    className={`flex w-full min-w-0 items-center justify-between rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${isMoreActive ||
                       mobileMoreOpen
-                        ? 'bg-white/10 text-mayad-gold'
-                        : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
-                    }`}
+                      ? 'bg-white/10 text-mayad-gold'
+                      : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
+                      }`}
                   >
 
                     <span className="flex min-w-0 items-center gap-2">
@@ -1172,11 +1126,10 @@ export default function Navbar() {
                     </span>
 
                     <ChevronDown
-                      className={`h-5 w-5 transition-transform duration-200 ${
-                        mobileMoreOpen
-                          ? 'rotate-180'
-                          : ''
-                      }`}
+                      className={`h-5 w-5 transition-transform duration-200 ${mobileMoreOpen
+                        ? 'rotate-180'
+                        : ''
+                        }`}
                     />
 
                   </button>
@@ -1222,19 +1175,17 @@ export default function Navbar() {
                                   false
                                 );
                               }}
-                              className={`flex w-full min-w-0 items-center gap-3 px-5 py-3 text-sm font-medium transition-colors ${
-                                active
-                                  ? 'bg-mayad-gold text-black'
-                                  : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                              }`}
+                              className={`flex w-full min-w-0 items-center gap-3 px-5 py-3 text-sm font-medium transition-colors ${active
+                                ? 'bg-mayad-gold text-black'
+                                : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
+                                }`}
                             >
 
                               <Icon
-                                className={`h-4 w-4 ${
-                                  active
-                                    ? 'text-black'
-                                    : 'text-mayad-gold'
-                                }`}
+                                className={`h-4 w-4 ${active
+                                  ? 'text-black'
+                                  : 'text-mayad-gold'
+                                  }`}
                               />
 
                               {item.name}
@@ -1311,24 +1262,6 @@ export default function Navbar() {
 
               )}
 
-
-              {/* DOWNLOAD APP */}
-
-              <a
-                href="https://play.google.com/store/apps/details?id=com.mayad.app"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  setMobileMenuOpen(false)
-                }
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-mayad-gold py-3 text-sm font-bold text-black shadow-glow-gold"
-              >
-                <Smartphone className="h-4 w-4" />
-
-                <span>
-                  {t('downloadApp')}
-                </span>
-              </a>
 
             </div>
 

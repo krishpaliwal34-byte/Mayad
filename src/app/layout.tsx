@@ -8,6 +8,7 @@ import SearchModal from '@/components/SearchModal';
 import LoginModal from '@/components/LoginModal';
 import SubscribeModal from '@/components/SubscribeModal';
 import ConditionalLayout from '@/components/ConditionalLayout';
+import MobileBottomNav from '@/components/MobileBottomNav';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -133,6 +134,10 @@ export const metadata: Metadata = {
     },
   },
 
+  // ==========================================================
+  // FAVICON / APP ICONS
+  // ==========================================================
+
   icons: {
     icon: [
       {
@@ -163,6 +168,9 @@ export const metadata: Metadata = {
   },
 };
 
+// ============================================================
+// ROOT LAYOUT
+// ============================================================
 
 export default function RootLayout({
   children,
@@ -170,17 +178,52 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth`}>
-      <body className="bg-mayad-bg text-slate-100 antialiased font-sans flex flex-col min-h-screen">
+    <html
+      lang="en"
+      className={`${inter.variable} scroll-smooth`}
+    >
+      <body
+        className="
+          bg-mayad-bg
+          text-slate-100
+          antialiased
+          font-sans
+          flex
+          flex-col
+          min-h-screen
+          pb-24
+          sm:pb-0
+        "
+      >
         <AppProvider>
+
+          {/* ==================================================
+              MAIN WEBSITE LAYOUT
+          ================================================== */}
+
           <ConditionalLayout>
             {children}
           </ConditionalLayout>
 
-          {/* Global Modals */}
+          {/* ==================================================
+              MOBILE BOTTOM NAVIGATION
+              
+              Visible only on mobile.
+              Hidden automatically on sm and larger screens.
+          ================================================== */}
+
+          <MobileBottomNav />
+
+          {/* ==================================================
+              GLOBAL MODALS
+          ================================================== */}
+
           <VideoModal />
+
           <SearchModal />
+
           <LoginModal />
+
           <SubscribeModal />
 
         </AppProvider>

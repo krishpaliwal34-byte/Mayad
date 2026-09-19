@@ -48,17 +48,22 @@ export default function Top5() {
   // DESKTOP WHEEL CONTROL
   //
   // Vertical mouse wheel = PAGE SCROLL
-  // Horizontal mouse wheel = BLOCK SLIDER SCROLL
+  // Horizontal mouse wheel = DO NOT MOVE SLIDER
   //
-  // Mobile touch scrolling is NOT affected by this.
+  // Mobile touch scrolling is handled naturally by browser.
   // ============================================================
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    // Do nothing on mobile.
     if (window.innerWidth < 640) {
       return;
     }
 
-    // Only stop horizontal wheel movement on desktop.
+    // If horizontal wheel movement is detected,
+    // prevent the slider from moving.
+    //
+    // Vertical wheel remains completely untouched,
+    // so the page can scroll normally.
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
       event.preventDefault();
     }
@@ -89,7 +94,23 @@ export default function Top5() {
         type="button"
         onClick={scrollLeft}
         aria-label="Previous"
-        className="absolute left-1 top-1/2 z-30 hidden -translate-y-1/2 items-center justify-center text-white transition hover:scale-110 sm:flex lg:left-2"
+        className="
+          absolute
+          left-1
+          top-1/2
+          z-30
+          hidden
+          -translate-y-1/2
+          items-center
+          justify-center
+          text-white
+          transition-all
+          duration-300
+          hover:scale-110
+          hover:text-mayad-gold
+          sm:flex
+          lg:left-2
+        "
       >
         <ChevronLeft className="h-7 w-7 sm:h-8 sm:w-8" />
       </button>
@@ -109,8 +130,15 @@ export default function Top5() {
           overflow-y-visible
           px-4
           pb-2
-          touch-pan-y
+
+          /* IMPORTANT:
+             Allow BOTH horizontal slider swipe
+             AND vertical page scrolling on mobile.
+          */
+          touch-auto
+
           overscroll-x-contain
+
           sm:mt-5
           sm:gap-5
           sm:overflow-x-hidden
@@ -122,6 +150,7 @@ export default function Top5() {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
+          touchAction: 'auto',
         }}
       >
 
@@ -150,6 +179,7 @@ export default function Top5() {
 
             <div
               className="
+                group/poster
                 absolute
                 right-0
                 top-0
@@ -161,23 +191,63 @@ export default function Top5() {
                 shadow-xl
               "
             >
+
+              {/* Poster Image */}
+
               <Image
                 src={movie.posterUrl}
                 alt={movie.title}
                 fill
-                sizes="240px"
+                sizes="
+                  (max-width: 639px) 135px,
+                  (max-width: 1023px) 200px,
+                  240px
+                "
                 draggable={false}
                 className="
+                  pointer-events-none
                   object-cover
                   transition-transform
-                  duration-500
-                  group-hover:scale-105
+                  duration-700
+                  ease-out
+                  group-hover/poster:scale-110
                 "
               />
 
-              {/* Poster Gradient */}
+              {/* Dark Gradient */}
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  inset-0
+                  bg-gradient-to-t
+                  from-black/75
+                  via-black/10
+                  to-transparent
+                  transition-all
+                  duration-500
+                  group-hover/poster:from-black/60
+                  group-hover/poster:via-transparent
+                "
+              />
+
+              {/* Hover Glow */}
+
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  inset-0
+                  rounded-lg
+                  ring-1
+                  ring-transparent
+                  transition-all
+                  duration-500
+                  group-hover/poster:ring-mayad-gold/30
+                "
+              />
+
             </div>
 
             {/* =================================================
@@ -197,9 +267,10 @@ export default function Top5() {
                 tracking-[-0.08em]
                 text-white
                 drop-shadow-[0_6px_9px_rgba(0,0,0,0.85)]
-                transition-transform
+                transition-all
                 duration-500
-                group-hover:-translate-y-1
+                group-hover:-translate-y-2
+                group-hover:scale-105
                 sm:text-[115px]
                 lg:text-[125px]
               "
@@ -220,7 +291,23 @@ export default function Top5() {
         type="button"
         onClick={scrollRight}
         aria-label="Next"
-        className="absolute right-1 top-1/2 z-30 hidden -translate-y-1/2 items-center justify-center text-white transition hover:scale-110 sm:flex lg:right-2"
+        className="
+          absolute
+          right-1
+          top-1/2
+          z-30
+          hidden
+          -translate-y-1/2
+          items-center
+          justify-center
+          text-white
+          transition-all
+          duration-300
+          hover:scale-110
+          hover:text-mayad-gold
+          sm:flex
+          lg:right-2
+        "
       >
         <ChevronRight className="h-7 w-7 sm:h-8 sm:w-8" />
       </button>
