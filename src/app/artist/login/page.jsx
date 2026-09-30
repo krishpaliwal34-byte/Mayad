@@ -22,7 +22,10 @@ import {
 import '@/components/artist/artist-system.css';
 
 const BACKEND_URL =
-  process.env.API_URL || 'http://localhost:5000';
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.API_URL ||
+  'http://localhost:5000';
 
 export default function ArtistLoginPage() {
   const router = useRouter();
