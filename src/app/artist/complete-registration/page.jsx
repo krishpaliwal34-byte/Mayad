@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:2000";
+  process.env.API_URL || "http://localhost:2000";
 
 export default function CompleteRegistration() {
   const router = useRouter();

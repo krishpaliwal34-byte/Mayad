@@ -3,7 +3,7 @@
 // Client API layer for Admin Auth, Dashboard Stats & Artist Management
 // ============================================================
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
 const ADMIN_API_URL = `${API_BASE_URL}/admin`;
 
 // Token storage key

@@ -66,7 +66,7 @@ const AppContext = createContext<
 // ============================================================
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.API_URL ||
   'https://mayad-backend.vercel.app/api';
 
 // ============================================================
