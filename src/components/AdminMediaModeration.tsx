@@ -42,7 +42,7 @@ interface MediaItem {
   createdAt: string;
 }
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 export default function AdminMediaModeration() {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);

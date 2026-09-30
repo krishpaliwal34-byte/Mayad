@@ -18,7 +18,7 @@ import ArtistMyProjects from '@/components/ArtistMyProjects';
 
 const BACKEND_URL =
 
-   process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+   process.env.API_URL || 'http://localhost:5000';
 
 const inputClass =
 
@@ -272,7 +272,7 @@ export default function ArtistDashboardPage() {
 
             localStorage.getItem('token');
 
-         const res = await fetch(`${BACKEND_URL}/api/artist/me`, {
+         const res = await fetch(`https://mayad-backend.vercel.app/api/artist/me`, {
 
             method: 'PUT',
 

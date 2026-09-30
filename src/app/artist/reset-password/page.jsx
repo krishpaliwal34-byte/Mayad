@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, RefreshCw, KeyRound, ArrowRight } from 'lucide-react';
 import '@/components/artist/artist-system.css';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();

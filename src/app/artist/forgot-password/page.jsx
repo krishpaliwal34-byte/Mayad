@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Mail, ArrowLeft, CheckCircle, AlertCircle, RefreshCw, KeyRound, Copy } from 'lucide-react';
 import '@/components/artist/artist-system.css';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL|| 'http://localhost:5000';
 
 export default function ArtistForgotPasswordPage() {
   const [email, setEmail] = useState('');

@@ -14,7 +14,7 @@ interface MediaItem {
   createdAt: string;
 }
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 export default function ArtistPublicMedia({ artistId }: { artistId: string }) {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);

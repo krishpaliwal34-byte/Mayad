@@ -119,7 +119,7 @@ export default function Navbar() {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('mayad_artist_jwt') || localStorage.getItem('token');
       if (token && !localStorage.getItem('mayad_artist_profile_photo')) {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+        const backendUrl = process.env.API_URL || 'http://localhost:5000';
         fetch(`${backendUrl}/api/artist/me`, {
           headers: {
             'Content-Type': 'application/json',

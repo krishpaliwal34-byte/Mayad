@@ -20,7 +20,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 export interface PublicJob {
   _id: string;

@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { MOVIES_LIST } from '@/data/movie';
 import { useApp } from '@/context/AppContext';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 export default function MoviesPage() {
   const { t } = useApp();

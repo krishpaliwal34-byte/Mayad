@@ -18,7 +18,7 @@ import { MOVIES_LIST } from '@/data/movie';
 import { POPULAR_PERSONALITIES } from '@/data/content';
 import { useApp } from '@/context/AppContext';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
 
 export default function MovieDetailPage() {
   const params = useParams();
