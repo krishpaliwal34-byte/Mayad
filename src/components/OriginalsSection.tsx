@@ -30,7 +30,7 @@ export default function OriginalsSection() {
     const fetchOriginals = async () => {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/movies/originals',
+          'https://mayad-backend.vercel.app/api/movies/originals',
           {
             method: 'GET',
             headers: {

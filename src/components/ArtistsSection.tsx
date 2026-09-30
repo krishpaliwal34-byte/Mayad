@@ -54,7 +54,7 @@ export default function ArtistsSection() {
         setError('');
 
         const response = await fetch(
-          'http://localhost:5000/api/artist',
+          'https://mayad-backend.vercel.app/api/artist',
           {
             method: 'GET',
             headers: {

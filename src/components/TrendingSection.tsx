@@ -56,7 +56,7 @@ export default function TrendingSection() {
         setError(false);
 
         const response = await fetch(
-          'http://localhost:5000/api/movies/trending',
+          'https://mayad-backend.vercel.app/api/movies/trending',
           {
             method: 'GET',
             headers: {

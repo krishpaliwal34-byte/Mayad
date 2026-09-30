@@ -36,7 +36,7 @@ export default function Top5() {
         setError(false);
 
         const response = await fetch(
-          'http://localhost:5000/api/movies/top5',
+          'https://mayad-backend.vercel.app/api/movies/top5',
           {
             method: 'GET',
             headers: {
