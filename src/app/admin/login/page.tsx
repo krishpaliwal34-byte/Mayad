@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react';
 import { adminService } from '@/services/adminService';
+import { getApiBaseUrl } from '@/utils/config';
 
 export default function AdminAuthPage() {
   const router = useRouter();
@@ -99,7 +100,7 @@ export default function AdminAuthPage() {
 
     try {
       // Call password reset API endpoint
-      const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
+      const API_BASE_URL = getApiBaseUrl();
       const res = await fetch(`${API_BASE_URL}/artist/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

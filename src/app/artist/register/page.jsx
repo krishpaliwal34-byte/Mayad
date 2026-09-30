@@ -25,8 +25,9 @@ import {
   Star,
 } from 'lucide-react';
 
-const BACKEND_URL =
-  process.env.API_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 const ROLE_CATEGORIES = [
   {

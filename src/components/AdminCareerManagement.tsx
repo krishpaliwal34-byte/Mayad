@@ -31,7 +31,9 @@ import {
   ToggleRight,
 } from 'lucide-react';
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 export const CAREER_CATEGORIES = [
   {

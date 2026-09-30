@@ -18,7 +18,9 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

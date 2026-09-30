@@ -20,8 +20,9 @@ import {
 } from 'lucide-react';
 
 import '@/components/artist/artist-system.css';
+import { getBackendUrl } from '@/utils/config';
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
+const BACKEND_URL = getBackendUrl();
 
 export default function ArtistLoginPage() {
   const router = useRouter();

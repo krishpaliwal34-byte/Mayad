@@ -15,8 +15,9 @@ import {
   XCircle,
 } from 'lucide-react';
 
-const API_URL =
-  process.env.API_URL || 'http://localhost:5000/api';
+import { getApiBaseUrl } from '@/utils/config';
+
+const API_URL = getApiBaseUrl();
 
 type PaymentStatus = 'success' | 'pending' | 'failed';
 

@@ -67,7 +67,9 @@ interface AdminCastRoleModalProps {
   showToast: (text: string, type?: 'success' | 'error') => void;
 }
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 export default function AdminCastRoleModal({ movie, onClose, showToast }: AdminCastRoleModalProps) {
   const [roles, setRoles] = useState<MovieRoleItem[]>([]);

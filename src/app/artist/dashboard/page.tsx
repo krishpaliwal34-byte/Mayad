@@ -16,9 +16,9 @@ import {
 import ArtistMyMedia from '@/components/ArtistMyMedia';
 import ArtistMyProjects from '@/components/ArtistMyProjects';
 
-const BACKEND_URL =
+import { getBackendUrl } from '@/utils/config';
 
-   process.env.API_URL || 'http://localhost:5000';
+const BACKEND_URL = getBackendUrl();
 
 const inputClass =
 

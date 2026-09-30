@@ -30,8 +30,9 @@ import {
   Link as LinkIcon,
 } from 'lucide-react';
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 // --------------------------------------------------
 // HELPERS

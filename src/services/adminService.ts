@@ -3,7 +3,9 @@
 // Client API layer for Admin Auth, Dashboard Stats & Artist Management
 // ============================================================
 
-const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
+import { getApiBaseUrl } from '@/utils/config';
+
+const API_BASE_URL = getApiBaseUrl();
 const ADMIN_API_URL = `${API_BASE_URL}/admin`;
 
 // Token storage key

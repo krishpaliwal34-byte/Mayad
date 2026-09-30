@@ -60,7 +60,9 @@ interface AdminProjectsRolesProps {
   onStatsUpdate?: () => void;
 }
 
-const BACKEND_URL = process.env.API_URL || 'http://localhost:5000';
+import { getBackendUrl } from '@/utils/config';
+
+const BACKEND_URL = getBackendUrl();
 
 export default function AdminProjectsRoles({ showToast, onStatsUpdate }: AdminProjectsRolesProps) {
   const [movies, setMovies] = useState<AdminMovieRecord[]>([]);
