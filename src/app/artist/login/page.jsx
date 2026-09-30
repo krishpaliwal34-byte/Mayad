@@ -47,7 +47,7 @@ export default function ArtistLoginPage() {
       setLoading(true);
       setErrorMsg('');
 
-      const res = await fetch(`${BACKEND_URL}/api/artist/login`, {
+      const res = await fetch(`https://mayad-backend.vercel.app/api/artist/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
