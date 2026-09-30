@@ -1,7 +1,6 @@
 import Hero from '@/components/Hero';
 import PopularPersonalities from '@/components/PopularPersonalities';
 import TrendingSection from '@/components/TrendingSection';
-import MoviesSection from '@/components/MoviesSection';
 import OriginalsSection from '@/components/OriginalsSection';
 import FavoriteGenres from '@/components/FavoriteGenres/FavoriteGenres';
 import Top5 from '@/components/Top5';
@@ -16,7 +15,6 @@ export default function Home() {
       <Top5 />
       <PopularPersonalities />
       <TrendingSection />
-      <MoviesSection />
       <OriginalsSection />
       <FavoriteGenres />
       <AppDownload />

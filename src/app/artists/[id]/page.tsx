@@ -16,6 +16,7 @@ import {
 
 import { MOVIES_LIST } from '@/data/movie';
 import { POPULAR_PERSONALITIES } from '@/data/content';
+import ArtistPublicMedia from '@/components/ArtistPublicMedia';
 
 interface PageProps {
   params: Promise<{
@@ -557,6 +558,9 @@ export default async function ArtistPage({ params }: PageProps) {
               </div>
             </div>
           )}
+
+          {/* Artist Photos & Reels Portfolio */}
+          <ArtistPublicMedia artistId={id} />
 
           {/* CTA */}
           <div className="mt-10 flex justify-center">

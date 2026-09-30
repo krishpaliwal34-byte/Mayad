@@ -330,18 +330,17 @@ export default function Hero() {
               ================================================= */}
 
               <div className="mt-6 flex flex-wrap gap-2.5">
-                {/* WATCH */}
 
-                <button
-                  onClick={() =>
-                    playVideo(activeHero)
-                  }
+                {/* WATCH NOW */}
+
+                <Link
+                  href={activeHero.url}
                   className="inline-flex items-center gap-2 rounded-full bg-mayad-gold px-5 py-3 text-sm font-extrabold text-black shadow-[0_0_35px_rgba(245,180,40,0.25)] transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(245,180,40,0.4)] active:scale-95 sm:px-6 sm:py-3"
                 >
                   <Play className="h-4 w-4 fill-current sm:h-5 sm:w-5" />
 
                   {t('watchNow')}
-                </button>
+                </Link>
 
                 {/* MORE INFO */}
 
@@ -426,43 +425,40 @@ export default function Hero() {
 
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden rounded-full border border-white/10 bg-black/45 p-1.5 backdrop-blur-md">
 
-          {HERO_ITEMS.map(
-            (item, index) => {
-              const thumbnail =
-                item.bg ||
-                item.backdropUrl ||
-                item.posterUrl ||
-                '';
+          {HERO_ITEMS.map((item, index) => {
+            const thumbnail =
+              item.bg ||
+              item.backdropUrl ||
+              item.posterUrl ||
+              '';
 
-              return (
-                <button
-                  key={item.id}
-                  onClick={() =>
-                    selectSlide(index)
-                  }
-                  aria-label={`Show ${item.title}`}
-                  className={`relative h-10 w-16 flex-shrink-0 overflow-hidden rounded-md border transition-all ${
-                    index === currentIndex
-                      ? 'scale-105 border-mayad-gold shadow-[0_0_15px_rgba(245,180,40,0.3)]'
-                      : 'border-white/10 opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  {thumbnail && (
-                    <Image
-                      src={thumbnail}
-                      alt={item.title}
-                      fill
-                      sizes="100px"
-                      className="object-cover object-center"
-                    />
-                  )}
+            return (
+              <button
+                key={item.id}
+                onClick={() =>
+                  selectSlide(index)
+                }
+                aria-label={`Show ${item.title}`}
+                className={`relative h-10 w-16 flex-shrink-0 overflow-hidden rounded-md border transition-all ${
+                  index === currentIndex
+                    ? 'scale-105 border-mayad-gold shadow-[0_0_15px_rgba(245,180,40,0.3)]'
+                    : 'border-white/10 opacity-60 hover:opacity-100'
+                }`}
+              >
+                {thumbnail && (
+                  <Image
+                    src={thumbnail}
+                    alt={item.title}
+                    fill
+                    sizes="100px"
+                    className="object-cover object-center"
+                  />
+                )}
 
-                  <div className="absolute inset-0 bg-black/20" />
-                </button>
-              );
-            }
-          )}
-
+                <div className="absolute inset-0 bg-black/20" />
+              </button>
+            );
+          })}
         </div>
 
         {/* NEXT */}
@@ -474,7 +470,6 @@ export default function Hero() {
         >
           <ChevronRight className="h-4 w-4" />
         </button>
-
       </div>
 
       {/* ========================================================
@@ -497,23 +492,20 @@ export default function Hero() {
 
         <div className="flex max-w-[180px] items-center gap-1.5 overflow-hidden rounded-full border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-md">
 
-          {HERO_ITEMS.map(
-            (item, index) => (
-              <button
-                key={item.id}
-                onClick={() =>
-                  selectSlide(index)
-                }
-                aria-label={`Show ${item.title}`}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentIndex
-                    ? 'w-6 bg-mayad-gold'
-                    : 'w-2 bg-white/40'
-                }`}
-              />
-            )
-          )}
-
+          {HERO_ITEMS.map((item, index) => (
+            <button
+              key={item.id}
+              onClick={() =>
+                selectSlide(index)
+              }
+              aria-label={`Show ${item.title}`}
+              className={`h-2 rounded-full transition-all ${
+                index === currentIndex
+                  ? 'w-6 bg-mayad-gold'
+                  : 'w-2 bg-white/40'
+              }`}
+            />
+          ))}
         </div>
 
         {/* NEXT */}
@@ -525,9 +517,7 @@ export default function Hero() {
         >
           <ChevronRight className="h-4 w-4" />
         </button>
-
       </div>
-
     </section>
   );
 }

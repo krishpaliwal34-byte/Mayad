@@ -9,6 +9,7 @@
 export interface HeroItem {
   id: string;
   slug: string;
+  url: string;
   title: string;
   originalTitle?: string;
 
@@ -158,6 +159,7 @@ export const HERO_ITEMS: HeroItem[] = [
   {
     id: 'hero-1',
     slug: 'vadlya-hindwa',
+    url: 'http://mayad.in/movie-details/%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%B8%E0%A5%8D%E0%A4%A5%E0%A4%BE%E0%A4%A8%E0%A5%80-%E0%A4%AB%E0%A4%BC%E0%A4%BF%E0%A4%B2%E0%A5%8D%E0%A4%AE---%E0%A4%B5%E0%A4%A1%E0%A4%B2%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A4%B5%E0%A4%BE-%7C-vadlya-hindva-%7C',
     title: 'Vadlya Hindwa',
     originalTitle: 'वडल्या हिंडवा',
     type: 'movie',
@@ -187,6 +189,7 @@ export const HERO_ITEMS: HeroItem[] = [
     id: 'hero-2',
     slug: 'seth-maharo-sanwariya',
     title: 'Sanwriya Seth',
+    url: 'https://mayad.in/movie-details/trailer-savaraya-satha-sanwariya-seth-rajasathana-falma?is_search=1',
     originalTitle: 'सांवरिया सेठ',
     type: 'movie',
     category: 'Musical / Drama',
@@ -220,6 +223,7 @@ export const HERO_ITEMS: HeroItem[] = [
   {
     id: 'hero-4',
     slug: 'sawariya',
+    url: 'https://mayad.in/movie-details/song-satha-mahara-savaraya-seth-maharo-sanwariya?is_search=1',
     title: 'Seth Maharo Sanwariya',
     originalTitle: 'सेठ म्हारो सांवरिया',
     type: 'movie',

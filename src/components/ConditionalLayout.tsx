@@ -15,12 +15,15 @@ export default function ConditionalLayout({
 }: ConditionalLayoutProps) {
   const pathname = usePathname();
 
-  const isAuthPage =
+  const isStandalonePage =
     pathname === '/login' ||
     pathname === '/signup' ||
-    pathname === '/forgot-password';
+    pathname === '/forgot-password' ||
+    pathname?.startsWith('/artist') ||
+    pathname?.startsWith('/artist-portal') ||
+    pathname?.startsWith('/admin');
 
-  if (isAuthPage) {
+  if (isStandalonePage) {
     return <>{children}</>;
   }
 

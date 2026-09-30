@@ -1,22 +1,95 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { TOP_5_MOVIES } from '@/data/movie';
 import { useApp } from '@/context/AppContext';
+import { MOVIES_LIST } from '@/data/movie';
+
+interface Movie {
+  _id: string;
+  id?: string | number;
+  slug: string;
+  title: string;
+  posterUrl: string;
+  movieUrl?: string;
+}
 
 export default function Top5() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const { t } = useApp();
 
+  const [top5, setTop5] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   // ============================================================
-  // TODAY'S TOP 5
+  // FETCH TOP 5 MOVIES FROM MONGODB API
   // ============================================================
 
-  const top5 = TOP_5_MOVIES;
+  useEffect(() => {
+    const fetchTop5 = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+
+        const response = await fetch(
+          'http://localhost:5000/api/movies/top5',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch Top 5 movies');
+        }
+
+        const data = await response.json();
+
+        if (
+          data.success &&
+          Array.isArray(data.movies) &&
+          data.movies.length > 0
+        ) {
+          setTop5(data.movies);
+        } else {
+          const fallback = (MOVIES_LIST as any[])
+            .filter(
+              (m) =>
+                m.isTop5 ||
+                m.isTrending ||
+                m.isOriginal
+            )
+            .slice(0, 5);
+
+          setTop5(fallback);
+        }
+      } catch (err) {
+        console.error('Top 5 API Error:', err);
+
+        const fallback = (MOVIES_LIST as any[])
+          .filter(
+            (m) =>
+              m.isTop5 ||
+              m.isTrending ||
+              m.isOriginal
+          )
+          .slice(0, 5);
+
+        setTop5(fallback);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTop5();
+  }, []);
 
   // ============================================================
   // LEFT SCROLL
@@ -46,37 +119,59 @@ export default function Top5() {
 
   // ============================================================
   // DESKTOP WHEEL CONTROL
-  //
-  // Vertical mouse wheel = PAGE SCROLL
-  // Horizontal mouse wheel = DO NOT MOVE SLIDER
-  //
-  // Mobile touch scrolling is handled naturally by browser.
   // ============================================================
 
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    // Do nothing on mobile.
+  const handleWheel = (
+    event: React.WheelEvent<HTMLDivElement>
+  ) => {
     if (window.innerWidth < 640) {
       return;
     }
 
-    // If horizontal wheel movement is detected,
-    // prevent the slider from moving.
-    //
-    // Vertical wheel remains completely untouched,
-    // so the page can scroll normally.
-    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+    if (
+      Math.abs(event.deltaX) >
+      Math.abs(event.deltaY)
+    ) {
       event.preventDefault();
     }
   };
 
-  if (!top5.length) {
+  // ============================================================
+  // LOADING STATE
+  // ============================================================
+
+  if (loading) {
+    return (
+      <section className="relative bg-[#0b0b0d] py-6 sm:py-8 lg:py-10">
+        <div className="px-4 sm:px-8 lg:px-12">
+          <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl lg:text-3xl">
+            {t('top5ThisWeek')}
+          </h2>
+
+          <p className="mt-5 text-sm text-gray-400">
+            Loading Top 5 movies...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  // ============================================================
+  // EMPTY / ERROR STATE
+  // ============================================================
+
+  if (error || !top5.length) {
     return null;
   }
+
+  // ============================================================
+  // RENDER
+  // ============================================================
 
   return (
     <section className="relative overflow-hidden bg-[#0b0b0d] py-6 sm:py-8 lg:py-10">
 
-      {/* =====================================================
+      {/* ======================================================
           HEADER
       ====================================================== */}
 
@@ -86,7 +181,7 @@ export default function Top5() {
         </h2>
       </div>
 
-      {/* =====================================================
+      {/* ======================================================
           LEFT BUTTON
       ====================================================== */}
 
@@ -115,7 +210,7 @@ export default function Top5() {
         <ChevronLeft className="h-7 w-7 sm:h-8 sm:w-8" />
       </button>
 
-      {/* =====================================================
+      {/* ======================================================
           SLIDER
       ====================================================== */}
 
@@ -130,15 +225,8 @@ export default function Top5() {
           overflow-y-visible
           px-4
           pb-2
-
-          /* IMPORTANT:
-             Allow BOTH horizontal slider swipe
-             AND vertical page scrolling on mobile.
-          */
           touch-auto
-
           overscroll-x-contain
-
           sm:mt-5
           sm:gap-5
           sm:overflow-x-hidden
@@ -154,136 +242,149 @@ export default function Top5() {
         }}
       >
 
-        {top5.map((movie, index) => (
-          <Link
-            key={movie.id}
-            href={`/movies/${movie.slug}`}
-            className="
-              group
-              relative
-              flex
-              h-[245px]
-              min-w-[175px]
-              shrink-0
-              items-end
-              sm:h-[305px]
-              sm:min-w-[225px]
-              lg:h-[325px]
-              lg:min-w-[240px]
-            "
-          >
+        {top5.slice(0, 5).map((movie, index) => {
 
-            {/* =================================================
-                POSTER
-            ================================================== */}
+          // ==================================================
+          // USE URL SAVED IN MONGODB
+          // ==================================================
 
-            <div
+          const movieUrl =
+            movie.movieUrl?.trim() ||
+            `/movie-details/${encodeURIComponent(movie.slug)}`;
+
+          return (
+            <Link
+              key={movie._id || movie.slug}
+              href={movieUrl}
               className="
-                group/poster
-                absolute
-                right-0
-                top-0
-                h-full
-                w-[76%]
-                overflow-hidden
-                rounded-lg
-                bg-[#17171a]
-                shadow-xl
-              "
-            >
-
-              {/* Poster Image */}
-
-              <Image
-                src={movie.posterUrl}
-                alt={movie.title}
-                fill
-                sizes="
-                  (max-width: 639px) 135px,
-                  (max-width: 1023px) 200px,
-                  240px
-                "
-                draggable={false}
-                className="
-                  pointer-events-none
-                  object-cover
-                  transition-transform
-                  duration-700
-                  ease-out
-                  group-hover/poster:scale-110
-                "
-              />
-
-              {/* Dark Gradient */}
-
-              <div
-                className="
-                  pointer-events-none
-                  absolute
-                  inset-0
-                  bg-gradient-to-t
-                  from-black/75
-                  via-black/10
-                  to-transparent
-                  transition-all
-                  duration-500
-                  group-hover/poster:from-black/60
-                  group-hover/poster:via-transparent
-                "
-              />
-
-              {/* Hover Glow */}
-
-              <div
-                className="
-                  pointer-events-none
-                  absolute
-                  inset-0
-                  rounded-lg
-                  ring-1
-                  ring-transparent
-                  transition-all
-                  duration-500
-                  group-hover/poster:ring-mayad-gold/30
-                "
-              />
-
-            </div>
-
-            {/* =================================================
-                NUMBER
-            ================================================== */}
-
-            <div
-              className="
+                group
                 relative
-                z-10
-                -mb-1
-                -ml-1
-                select-none
-                text-[82px]
-                font-black
-                leading-none
-                tracking-[-0.08em]
-                text-white
-                drop-shadow-[0_6px_9px_rgba(0,0,0,0.85)]
-                transition-all
-                duration-500
-                group-hover:-translate-y-2
-                group-hover:scale-105
-                sm:text-[115px]
-                lg:text-[125px]
+                flex
+                h-[245px]
+                min-w-[175px]
+                shrink-0
+                items-end
+                sm:h-[305px]
+                sm:min-w-[225px]
+                lg:h-[325px]
+                lg:min-w-[240px]
               "
             >
-              {index + 1}
-            </div>
 
-          </Link>
-        ))}
+              {/* ==================================================
+                  POSTER
+              ================================================== */}
+
+              <div
+                className="
+                  group/poster
+                  absolute
+                  right-0
+                  top-0
+                  h-full
+                  w-[76%]
+                  overflow-hidden
+                  rounded-lg
+                  bg-[#17171a]
+                  shadow-xl
+                "
+              >
+
+                <Image
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  fill
+                  sizes="
+                    (max-width: 639px) 135px,
+                    (max-width: 1023px) 200px,
+                    240px
+                  "
+                  draggable={false}
+                  className="
+                    pointer-events-none
+                    object-cover
+                    transition-transform
+                    duration-700
+                    ease-out
+                    group-hover/poster:scale-110
+                  "
+                />
+
+                {/* ==================================================
+                    DARK GRADIENT
+                ================================================== */}
+
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    bg-gradient-to-t
+                    from-black/75
+                    via-black/10
+                    to-transparent
+                    transition-all
+                    duration-500
+                    group-hover/poster:from-black/60
+                    group-hover/poster:via-transparent
+                  "
+                />
+
+                {/* ==================================================
+                    HOVER GLOW
+                ================================================== */}
+
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+                    rounded-lg
+                    ring-1
+                    ring-transparent
+                    transition-all
+                    duration-500
+                    group-hover/poster:ring-mayad-gold/30
+                  "
+                />
+
+              </div>
+
+              {/* ==================================================
+                  NUMBER
+              ================================================== */}
+
+              <div
+                className="
+                  relative
+                  z-10
+                  -mb-1
+                  -ml-1
+                  select-none
+                  text-[82px]
+                  font-black
+                  leading-none
+                  tracking-[-0.08em]
+                  text-white
+                  drop-shadow-[0_6px_9px_rgba(0,0,0,0.85)]
+                  transition-all
+                  duration-500
+                  group-hover:-translate-y-2
+                  group-hover:scale-105
+                  sm:text-[115px]
+                  lg:text-[125px]
+                "
+              >
+                {index + 1}
+              </div>
+
+            </Link>
+          );
+        })}
 
       </div>
 
-      {/* =====================================================
+      {/* ======================================================
           RIGHT BUTTON
       ====================================================== */}
 

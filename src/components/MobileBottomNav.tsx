@@ -42,6 +42,10 @@ const navItems = [
 export default function MobileBottomNav() {
   const pathname = usePathname();
 
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/artist')) {
+    return null;
+  }
+
   const isActive = (href: string) => {
     if (href === '/') {
       return pathname === '/';

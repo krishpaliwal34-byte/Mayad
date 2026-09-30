@@ -1,13 +1,5 @@
-'use client';
-
-import React from 'react';
-import SeriesSection from '@/components/SeriesSection';
-import OriginalsSection from '@/components/OriginalsSection';
+import { notFound } from 'next/navigation';
 
 export default function SeriesPage() {
-  return (
-    <div className="min-h-screen pt-24 pb-16 bg-mayad-bg">
-      <SeriesSection />
-    </div>
-  );
+  notFound();
 }

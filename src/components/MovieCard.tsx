@@ -12,6 +12,21 @@ export default function MovieCard({ item }: { item: ContentItem }) {
   const { playVideo, toggleMyList, isInMyList, language, t } = useApp();
   const isSaved = isInMyList(item.id);
 
+  const getValidImageUrl = (url?: string) => {
+    if (!url || typeof url !== 'string') return 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=800&auto=format&fit=crop';
+    const trimmed = url.trim();
+    if (trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    return `/${trimmed}`;
+  };
+
+  const [imgSrc, setImgSrc] = React.useState(() => getValidImageUrl(item.posterUrl));
+
+  React.useEffect(() => {
+    setImgSrc(getValidImageUrl(item.posterUrl));
+  }, [item.posterUrl]);
+
   return (
     <motion.div
       whileHover={{ y: -6 }}
@@ -20,12 +35,13 @@ export default function MovieCard({ item }: { item: ContentItem }) {
     >
       {/* Poster Image Container */}
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
-        <Image
-          src={item.posterUrl}
+        <img
+          src={imgSrc}
           alt={item.title}
-          fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-108"
+          onError={() => {
+            setImgSrc('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=800&auto=format&fit=crop');
+          }}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
         />
 
         {/* Gradient Overlay */}

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -18,6 +18,8 @@ import { MOVIES_LIST } from '@/data/movie';
 import { POPULAR_PERSONALITIES } from '@/data/content';
 import { useApp } from '@/context/AppContext';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+
 export default function MovieDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
@@ -28,13 +30,36 @@ export default function MovieDetailPage() {
     isInMyList,
   } = useApp();
 
-  // ============================================================
-  // FIND MOVIE
-  // ============================================================
+  const [movie, setMovie] = useState<any>(() => MOVIES_LIST.find((item) => item.slug === slug) || null);
+  const [loading, setLoading] = useState(!movie);
 
-  const movie = MOVIES_LIST.find(
-    (item) => item.slug === slug
-  );
+  useEffect(() => {
+    async function loadMovie() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/movies/${slug}`);
+        const data = await res.json();
+        if (res.ok && data.success && data.movie) {
+          setMovie(data.movie);
+        }
+      } catch (err) {
+        console.error('Error fetching movie details:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (slug) loadMovie();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-mayad-bg px-4 text-white">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-mayad-gold border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-slate-400 text-sm">Loading movie details...</p>
+        </div>
+      </main>
+    );
+  }
 
   // ============================================================
   // MOVIE NOT FOUND
@@ -63,18 +88,15 @@ export default function MovieDetailPage() {
     );
   }
 
-  // ============================================================
-  // MY LIST
-  // ============================================================
-
-  const isSaved = isInMyList(movie.id);
+  const movieId = movie._id || movie.id || movie.slug;
+  const isSaved = isInMyList(movieId);
 
   // ============================================================
   // CAST MEMBERS
   // ============================================================
 
   const castMembers =
-    movie.cast?.map((castName) => {
+    movie.cast?.map((castName: string) => {
       const person = POPULAR_PERSONALITIES.find(
         (item) =>
           item.name.toLowerCase().trim() ===
@@ -93,7 +115,7 @@ export default function MovieDetailPage() {
   // ============================================================
 
   const recommendations = MOVIES_LIST.filter(
-    (item) => item.id !== movie.id
+    (item) => item.id !== movieId && item.slug !== movie.slug
   );
 
   // ============================================================
@@ -303,11 +325,10 @@ export default function MovieDetailPage() {
 
                 <p className="mt-1 text-sm font-semibold text-white">
                   {castMembers.length
-                    ? `${castMembers.length} ${
-                        castMembers.length === 1
-                          ? 'Artist'
-                          : 'Artists'
-                      }`
+                    ? `${castMembers.length} ${castMembers.length === 1
+                      ? 'Artist'
+                      : 'Artists'
+                    }`
                     : 'Cast information not available'}
                 </p>
 
@@ -336,7 +357,7 @@ export default function MovieDetailPage() {
 
                 <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide sm:gap-6">
 
-                  {castMembers.map((person, index) => (
+                  {castMembers.map((person: any, index: number) => (
 
                     <motion.div
                       key={`${person.name}-${index}`}
@@ -492,25 +513,55 @@ export default function MovieDetailPage() {
 
               {/* WATCH NOW */}
 
-              <button
-                onClick={() => playVideo(movie)}
+              {/* WATCH NOW */}
+              {/* WATCH NOW */}
+              <a
+                href={`https://mayad.in/movie-details/${encodeURIComponent(
+                  movie.slug
+                )}?id=${movie.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  const movieUrl = `https://mayad.in/movie-details/${encodeURIComponent(
+                    movie.slug
+                  )}?id=${movie.id}`;
+
+                  const isAndroid = /Android/i.test(
+                    navigator.userAgent
+                  );
+
+                  if (isAndroid) {
+                    const url = new URL(movieUrl);
+
+                    const intentUrl =
+                      `intent://${url.host}${url.pathname}${url.search}` +
+                      `#Intent;scheme=https;package=com.mayad.app;` +
+                      `S.browser_fallback_url=${encodeURIComponent(
+                        "https://play.google.com/store/apps/details?id=com.mayad.app"
+                      )};end`;
+
+                    window.location.href = intentUrl;
+                  } else {
+                    // iPhone: open the MAYAD Universal Link.
+                    // App opens if Universal Links are configured.
+                    window.location.href = movieUrl;
+                  }
+                }}
                 className="flex items-center gap-2 rounded-full bg-gradient-to-r from-mayad-gold to-mayad-goldHover px-6 py-3 text-sm font-bold text-black shadow-glow-gold transition-transform hover:scale-105"
               >
                 <Play className="h-4 w-4 fill-current" />
-
                 Watch Now
-              </button>
+              </a>
 
 
               {/* MY LIST */}
 
               <button
                 onClick={() => toggleMyList(movie.id)}
-                className={`flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold transition-all ${
-                  isSaved
-                    ? 'border-mayad-gold bg-mayad-gold/20 text-mayad-gold'
-                    : 'border-white/15 bg-white/10 text-white hover:bg-white/20'
-                }`}
+                className={`flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold transition-all ${isSaved
+                  ? 'border-mayad-gold bg-mayad-gold/20 text-mayad-gold'
+                  : 'border-white/15 bg-white/10 text-white hover:bg-white/20'
+                  }`}
               >
 
                 {isSaved ? (
