@@ -9,6 +9,7 @@ import SectionHeader from './SectionHeader';
 import ArtistCard from './ArtistCard';
 
 import { useApp } from '@/context/AppContext';
+import { getApiBaseUrl } from '@/utils/config';
 
 interface Artist {
   id: string;
@@ -53,8 +54,9 @@ export default function ArtistsSection() {
         setLoading(true);
         setError('');
 
+        const apiBase = getApiBaseUrl();
         const response = await fetch(
-          'https://mayad-backend.vercel.app/api/artist',
+          `${apiBase}/artist`,
           {
             method: 'GET',
             headers: {

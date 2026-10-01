@@ -257,9 +257,9 @@ export default function AdminMoviesManagement({ showToast, onStatsUpdate }: Admi
       genresText: '',
       description: '',
       castText: '',
-      director: 'MAYAD Original Team',
-      isOriginal: true,
-      isTrending: false,
+      director: 'MAYAD Team',
+      isOriginal: false,
+      isTrending: true,
       isTop5: false,
       isPublished: true,
     });
@@ -590,9 +590,7 @@ export default function AdminMoviesManagement({ showToast, onStatsUpdate }: Admi
               className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-200 focus:outline-none focus:border-amber-400 cursor-pointer"
             >
               <option value="all">All Badges</option>
-              <option value="original">MAYAD Originals</option>
               <option value="trending">Trending Titles</option>
-              <option value="top5">Top 5 Picks</option>
             </select>
           </div>
 
@@ -776,22 +774,10 @@ export default function AdminMoviesManagement({ showToast, onStatsUpdate }: Admi
 
                   {/* Highlight Feature Badges */}
                   <div className="absolute bottom-2.5 left-2.5 flex flex-wrap gap-1">
-                    {movie.isOriginal && (
-                      <span className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase bg-amber-500 text-black shadow-md flex items-center gap-1">
-                        <Sparkles className="w-2.5 h-2.5 fill-black" />
-                        Original
-                      </span>
-                    )}
                     {movie.isTrending && (
                       <span className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase bg-emerald-500 text-black shadow-md flex items-center gap-1">
                         <TrendingUp className="w-2.5 h-2.5" />
                         Trending
-                      </span>
-                    )}
-                    {movie.isTop5 && (
-                      <span className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase bg-cyan-400 text-black shadow-md flex items-center gap-1">
-                        <Award className="w-2.5 h-2.5" />
-                        Top 5
                       </span>
                     )}
                   </div>
@@ -1357,31 +1343,11 @@ export default function AdminMoviesManagement({ showToast, onStatsUpdate }: Admi
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.isOriginal}
-                      onChange={(e) => setFormData({ ...formData, isOriginal: e.target.checked })}
-                      className="w-4 h-4 accent-amber-500 rounded"
-                    />
-                    <span className="text-xs font-bold text-amber-300">MAYAD Original</span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
                       checked={formData.isTrending}
                       onChange={(e) => setFormData({ ...formData, isTrending: e.target.checked })}
                       className="w-4 h-4 accent-emerald-400 rounded"
                     />
-                    <span className="text-xs font-bold text-emerald-300">Trending</span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.isTop5}
-                      onChange={(e) => setFormData({ ...formData, isTop5: e.target.checked })}
-                      className="w-4 h-4 accent-cyan-400 rounded"
-                    />
-                    <span className="text-xs font-bold text-cyan-300">Top 5 Pick</span>
+                    <span className="text-xs font-bold text-emerald-300">Trending on MAYAD</span>
                   </label>
                 </div>
 

@@ -273,6 +273,54 @@ export const adminService = {
     return data;
   },
 
+  // 6. CREATE ARTIST DIRECTLY (ADMIN ONLY)
+  createArtist: async (payload: Partial<AdminArtistRecord>): Promise<{ success: boolean; message: string; artist: AdminArtistRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/artists`, {
+      method: 'POST',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to create artist record');
+    }
+    return data;
+  },
+
+  // 7. UPDATE ARTIST DETAILS
+  updateArtist: async (id: string, payload: Partial<AdminArtistRecord>): Promise<{ success: boolean; message: string; artist: AdminArtistRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/artists/${id}`, {
+      method: 'PUT',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to update artist record');
+    }
+    return data;
+  },
+
   // 6. GET ARTISTS
   getArtists: async (params: {
     page?: number;

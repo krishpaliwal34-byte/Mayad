@@ -33,6 +33,9 @@ import {
   Camera,
   Briefcase,
   Trash2,
+  BookOpen,
+  Plus,
+  UserPlus,
 } from 'lucide-react';
 import {
   adminService,
@@ -48,6 +51,8 @@ import AdminProjectsRoles from '@/components/AdminProjectsRoles';
 import AdminMediaModeration from '@/components/AdminMediaModeration';
 import AdminInquiriesManagement from '@/components/AdminInquiriesManagement';
 import AdminCareerManagement from '@/components/AdminCareerManagement';
+import AdminBlogsManagement from '@/components/AdminBlogsManagement';
+import AdminAddArtistManagement from '@/components/AdminAddArtistManagement';
 export default function AdminDashboardPage() {
   const router = useRouter();
   // Admin Profile & Auth State
@@ -55,7 +60,7 @@ export default function AdminDashboardPage() {
   const [authLoading, setAuthLoading] = useState(true);
   // Layout State
   const [activeTab, setActiveTab] = useState<
-   'overview' | 'movies' | 'media' | 'artists' | 'projects-roles' | 'career' | 'inquiries' | 'profile' | 'settings'
+   'overview' | 'movies' | 'media' | 'artists' | 'add-artist' | 'projects-roles' | 'career' | 'blogs' | 'inquiries' | 'profile' | 'settings'
   >('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -77,6 +82,88 @@ export default function AdminDashboardPage() {
   // Artist Deletion Confirmation State
   const [artistToDelete, setArtistToDelete] = useState<AdminArtistRecord | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Add Artist Modal State
+  const [isAddArtistModalOpen, setIsAddArtistModalOpen] = useState(false);
+  const [addArtistSubmitting, setAddArtistSubmitting] = useState(false);
+  const [newArtistData, setNewArtistData] = useState({
+    fullName: '',
+    stageName: '',
+    category: 'Actor',
+    secondaryCategory: '',
+    email: '',
+    phone: '',
+    location: 'Rajasthan',
+    experience: '5+ Years',
+    profilePhoto: '',
+    bio: '',
+    languages: 'Rajasthani, Hindi',
+    showreel: '',
+    imdb: '',
+    instagram: '',
+  });
+
+  const handleCreateArtist = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newArtistData.fullName.trim()) {
+      showToast('Artist Full Name is required', 'error');
+      return;
+    }
+
+    try {
+      setAddArtistSubmitting(true);
+      const languagesArr = newArtistData.languages
+        .split(',')
+        .map((l) => l.trim())
+        .filter(Boolean);
+
+      const res = await adminService.createArtist({
+        fullName: newArtistData.fullName,
+        stageName: newArtistData.stageName,
+        category: newArtistData.category,
+        secondaryCategory: newArtistData.secondaryCategory,
+        email: newArtistData.email,
+        phone: newArtistData.phone,
+        location: newArtistData.location,
+        experience: newArtistData.experience,
+        profilePhoto: newArtistData.profilePhoto,
+        bio: newArtistData.bio,
+        languages: languagesArr,
+        showreel: newArtistData.showreel,
+        imdb: newArtistData.imdb,
+        instagram: newArtistData.instagram,
+      });
+
+      if (res.success) {
+        showToast('Artist added successfully and published to /artists directory!');
+        setIsAddArtistModalOpen(false);
+        setNewArtistData({
+          fullName: '',
+          stageName: '',
+          category: 'Actor',
+          secondaryCategory: '',
+          email: '',
+          phone: '',
+          location: 'Rajasthan',
+          experience: '5+ Years',
+          profilePhoto: '',
+          bio: '',
+          languages: 'Rajasthani, Hindi',
+          showreel: '',
+          imdb: '',
+          instagram: '',
+        });
+        loadArtistsData();
+        loadDashboardStats();
+      } else {
+        showToast(res.message || 'Failed to add artist', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Failed to add artist', 'error');
+    } finally {
+      setAddArtistSubmitting(false);
+    }
+  };
   // Toasts / Feedback
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const showToast = (text: string, type: 'success' | 'error' = 'success') => {
@@ -292,9 +379,11 @@ export default function AdminDashboardPage() {
             { id: 'overview', label: 'Overview', icon: LayoutDashboard },
             { id: 'movies', label: 'Movies Management', icon: Film },
             { id: 'media', label: 'Media Moderation', icon: Camera },
-            { id: 'artists', label: 'Artists', icon: Users, badge: stats?.pendingApprovals },
+            { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
+            { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
             { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
             { id: 'career', label: 'Career Management', icon: Briefcase },
+            { id: 'blogs', label: 'Blogs Management', icon: BookOpen },
             { id: 'inquiries', label: 'Contacts / Inquiries', icon: MessageSquare },
             { id: 'profile', label: 'Admin Profile', icon: ShieldCheck },
             { id: 'settings', label: 'Settings', icon: Settings },
@@ -376,9 +465,11 @@ export default function AdminDashboardPage() {
                   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
                   { id: 'movies', label: 'Movies Management', icon: Film },
                   { id: 'media', label: 'Media Moderation', icon: Camera },
-                  { id: 'artists', label: 'Artists', icon: Users, badge: stats?.pendingApprovals },
+                  { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
+                  { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
                   { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
                   { id: 'career', label: 'Career Management', icon: Briefcase },
+                  { id: 'blogs', label: 'Blogs Management', icon: BookOpen },
                   { id: 'inquiries', label: 'Contacts / Inquiries', icon: MessageSquare },
                   { id: 'profile', label: 'Admin Profile', icon: ShieldCheck },
                   { id: 'settings', label: 'Settings', icon: Settings },
@@ -439,8 +530,10 @@ export default function AdminDashboardPage() {
                 {activeTab === 'movies' && 'Movies & Series Management'}
                 {activeTab === 'media' && 'Artist Media Moderation'}
                 {activeTab === 'artists' && 'Artist Directory & Approvals'}
+                {activeTab === 'add-artist' && 'Add Artist & Directory Management'}
                 {activeTab === 'projects-roles' && 'Projects & Roles'}
                 {activeTab === 'career' && 'Career Management'}
+                {activeTab === 'blogs' && 'Blogs & Articles Management'}
                 {activeTab === 'inquiries' && 'Contacts & Inquiries'}
                 {activeTab === 'profile' && 'Administrator Profile'}
                 {activeTab === 'settings' && 'System Settings'}
@@ -968,6 +1061,12 @@ export default function AdminDashboardPage() {
             </div>
           )}
           {/* =====================================================
+              TAB: ADD ARTIST & DIRECTORY MANAGEMENT
+          ===================================================== */}
+          {activeTab === 'add-artist' && (
+            <AdminAddArtistManagement showToast={showToast} onStatsUpdate={loadDashboardStats} />
+          )}
+          {/* =====================================================
               TAB: PROJECTS & ROLES
           ===================================================== */}
           {activeTab === 'projects-roles' && (
@@ -978,6 +1077,12 @@ export default function AdminDashboardPage() {
           ===================================================== */}
           {activeTab === 'career' && (
             <AdminCareerManagement />
+          )}
+          {/* =====================================================
+              TAB: BLOGS MANAGEMENT
+          ===================================================== */}
+          {activeTab === 'blogs' && (
+            <AdminBlogsManagement showToast={showToast} onStatsUpdate={loadDashboardStats} />
           )}
           {/* =====================================================
               TAB: INQUIRIES & CONTACTS MANAGEMENT
@@ -1131,6 +1236,210 @@ export default function AdminDashboardPage() {
                   </button>
                 )}
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Add Artist Modal */}
+      <AnimatePresence>
+        {isAddArtistModalOpen && (
+          <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[#090d1f] border border-amber-500/30 rounded-2xl p-6 max-w-2xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-extrabold text-white">Add New Artist</h3>
+                </div>
+                <button
+                  onClick={() => setIsAddArtistModalOpen(false)}
+                  className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateArtist} className="space-y-4 text-xs sm:text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Full Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={newArtistData.fullName}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, fullName: e.target.value })}
+                      placeholder="e.g. Ravindra Mewadi"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Stage Name / Screen Name</label>
+                    <input
+                      type="text"
+                      value={newArtistData.stageName}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, stageName: e.target.value })}
+                      placeholder="e.g. Ravindra Singh"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Category / Role *</label>
+                    <select
+                      value={newArtistData.category}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, category: e.target.value })}
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+                    >
+                      <option value="Actor">Actor / Actress</option>
+                      <option value="Singer">Singer / Vocalist</option>
+                      <option value="Director">Director</option>
+                      <option value="Model">Model</option>
+                      <option value="Producer">Producer</option>
+                      <option value="Dancer">Dancer / Choreographer</option>
+                      <option value="Music Composer">Music Composer</option>
+                      <option value="Writer">Writer / Scriptwriter</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Secondary Category</label>
+                    <input
+                      type="text"
+                      value={newArtistData.secondaryCategory}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, secondaryCategory: e.target.value })}
+                      placeholder="e.g. Action Director, Singer"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Profile Photo URL</label>
+                    <input
+                      type="text"
+                      value={newArtistData.profilePhoto}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, profilePhoto: e.target.value })}
+                      placeholder="/historical.jpg or https://..."
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Location / City</label>
+                    <input
+                      type="text"
+                      value={newArtistData.location}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, location: e.target.value })}
+                      placeholder="Jaipur, Rajasthan"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Experience</label>
+                    <input
+                      type="text"
+                      value={newArtistData.experience}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, experience: e.target.value })}
+                      placeholder="5+ Years"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Languages (Comma Separated)</label>
+                    <input
+                      type="text"
+                      value={newArtistData.languages}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, languages: e.target.value })}
+                      placeholder="Rajasthani, Hindi, English"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Biography / About</label>
+                  <textarea
+                    rows={3}
+                    value={newArtistData.bio}
+                    onChange={(e) => setNewArtistData({ ...newArtistData, bio: e.target.value })}
+                    placeholder="Brief description of artist's background and notable works..."
+                    className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1 text-xs">Showreel URL</label>
+                    <input
+                      type="text"
+                      value={newArtistData.showreel}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, showreel: e.target.value })}
+                      placeholder="https://youtube.com/..."
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1 text-xs">IMDb Profile</label>
+                    <input
+                      type="text"
+                      value={newArtistData.imdb}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, imdb: e.target.value })}
+                      placeholder="https://imdb.com/..."
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1 text-xs">Instagram Handle</label>
+                    <input
+                      type="text"
+                      value={newArtistData.instagram}
+                      onChange={(e) => setNewArtistData({ ...newArtistData, instagram: e.target.value })}
+                      placeholder="@artist_name"
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddArtistModalOpen(false)}
+                    disabled={addArtistSubmitting}
+                    className="px-4 py-2 rounded-xl border border-white/10 text-xs font-semibold text-slate-300 hover:bg-white/5 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={addArtistSubmitting}
+                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                  >
+                    {addArtistSubmitting ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Adding...</span>
+                      </>
+                    ) : (
+                      <span>Save & Publish Artist</span>
+                    )}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}

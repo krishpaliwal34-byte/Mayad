@@ -1,28 +1,55 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight, Search, BookOpen } from 'lucide-react';
-import { BLOG_POSTS } from '@/data/blog';
+import { Calendar, Clock, ArrowRight, Search, BookOpen, Loader2 } from 'lucide-react';
+import { BLOG_POSTS, BlogPost } from '@/data/blog';
 import { useApp } from '@/context/AppContext';
+import { getApiBaseUrl } from '@/utils/config';
 
 export default function BlogsPage() {
   const { language, t } = useApp();
   const [searchTerm, setSearchTerm] = useState('');
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const isRaj = language === 'RAJ';
 
-  const filteredBlogs = BLOG_POSTS.filter((blog) => {
-    const title = isRaj ? blog.titleRaj : blog.title;
-    const category = isRaj ? blog.categoryRaj : blog.category;
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        const apiBase = getApiBaseUrl();
+        const res = await fetch(`${apiBase}/blogs`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch blogs');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.blogs) && data.blogs.length > 0) {
+          setBlogs(data.blogs);
+        } else {
+          setBlogs(BLOG_POSTS);
+        }
+      } catch (err) {
+        console.error('Error fetching blogs from DB:', err);
+        setBlogs(BLOG_POSTS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const filteredBlogs = blogs.filter((blog) => {
+    const title = (isRaj && blog.titleRaj) ? blog.titleRaj : blog.title;
+    const category = (isRaj && blog.categoryRaj) ? blog.categoryRaj : blog.category;
     const searchLower = searchTerm.toLowerCase();
 
     return (
-      title.toLowerCase().includes(searchLower) ||
-      category.toLowerCase().includes(searchLower) ||
-      blog.author.toLowerCase().includes(searchLower)
+      (title || '').toLowerCase().includes(searchLower) ||
+      (category || '').toLowerCase().includes(searchLower) ||
+      (blog.author || '').toLowerCase().includes(searchLower)
     );
   });
 
@@ -68,7 +95,14 @@ export default function BlogsPage() {
 
       {/* ================= BLOGS GRID ================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {filteredBlogs.length === 0 ? (
+        {loading ? (
+          <div className="py-20 text-center flex flex-col items-center justify-center">
+            <Loader2 className="w-10 h-10 text-mayad-gold animate-spin mb-4" />
+            <p className="text-slate-400 text-sm">
+              {isRaj ? 'ब्लॉग लोड हो रिया है...' : 'Fetching articles from database...'}
+            </p>
+          </div>
+        ) : filteredBlogs.length === 0 ? (
           <div className="py-20 text-center">
             <BookOpen className="w-12 h-12 text-slate-500 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-white">
@@ -81,14 +115,15 @@ export default function BlogsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredBlogs.map((blog, index) => {
-              const title = isRaj ? blog.titleRaj : blog.title;
-              const category = isRaj ? blog.categoryRaj : blog.category;
-              const excerpt = isRaj ? blog.excerptRaj : blog.excerpt;
-              const readTime = isRaj ? blog.readTimeRaj : blog.readTime;
+              const title = (isRaj && blog.titleRaj) ? blog.titleRaj : blog.title;
+              const category = (isRaj && blog.categoryRaj) ? blog.categoryRaj : blog.category;
+              const excerpt = (isRaj && blog.excerptRaj) ? blog.excerptRaj : blog.excerpt;
+              const readTime = (isRaj && blog.readTimeRaj) ? blog.readTimeRaj : blog.readTime;
+              const img = blog.imageUrl || '/historical.jpg';
 
               return (
                 <motion.div
-                  key={blog.id}
+                  key={(blog as any)._id || blog.id || blog.slug || index}
                   initial={{ opacity: 0, y: 25 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
@@ -100,8 +135,8 @@ export default function BlogsPage() {
                     {/* Blog Cover */}
                     <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900">
                       <Image
-                        src={blog.imageUrl}
-                        alt={title}
+                        src={img}
+                        alt={title || 'Blog cover'}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-108"
