@@ -42,24 +42,24 @@ export default function Hero() {
             <div className="mt-1 h-[1px] w-20 bg-gradient-to-r from-transparent via-white/40 to-transparent sm:w-24" />
           </div>
 
-          {/* Main Heading with Black Shadow Effect */}
+          {/* Bold Stylish Main Heading */}
           <div className="relative my-2 flex -rotate-2 select-none flex-col items-center sm:my-4">
 
             {/* White Heading */}
-            <div className="relative inline-block px-2 py-0.5 sm:px-3 sm:py-1">
+            <div className="relative inline-block px-2 py-1 sm:px-3 sm:py-1.5">
               <div className="absolute inset-0 -z-10 scale-105 rounded-xl bg-black/60 blur-xl sm:blur-2xl" />
 
-              <h1 className="relative text-3xl font-black tracking-wide text-white drop-shadow-[0_6px_16px_rgba(0,0,0,0.95)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem] [text-shadow:_2px_3px_6px_rgba(0,0,0,0.95)] sm:[text-shadow:_3px_4px_8px_rgba(0,0,0,0.95)]">
-                मायड़ रो मान
+              <h1 className="relative font-black text-4xl tracking-wide text-white drop-shadow-[0_6px_16px_rgba(0,0,0,0.95)] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6rem] [text-shadow:_2px_3px_6px_rgba(0,0,0,0.95)] sm:[text-shadow:_3px_4px_8px_rgba(0,0,0,0.95)]">
+                हेलो मायड़
               </h1>
             </div>
 
             {/* Golden Yellow Heading */}
-            <div className="relative mt-1 inline-block px-3 py-1 sm:mt-2 sm:px-4 sm:py-1.5">
+            <div className="relative mt-1 inline-block px-3 py-1.5 sm:mt-2 sm:px-4 sm:py-2">
               <div className="absolute inset-0 -z-10 scale-105 rounded-xl bg-black/65 blur-xl sm:blur-2xl" />
 
-              <span className="relative text-3xl font-black tracking-wide text-[#ffc83b] drop-shadow-[0_6px_18px_rgba(0,0,0,0.95)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem] [text-shadow:_2px_3px_8px_rgba(0,0,0,0.95)] sm:[text-shadow:_3px_4px_10px_rgba(0,0,0,0.95)]">
-                राजस्थान री पहचान
+              <span className="relative font-black text-4xl tracking-wide text-[#ffc83b] drop-shadow-[0_6px_18px_rgba(0,0,0,0.95)] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6rem] [text-shadow:_2px_3px_8px_rgba(0,0,0,0.95)] sm:[text-shadow:_3px_4px_10px_rgba(0,0,0,0.95)]">
+                भाषा रो
               </span>
             </div>
           </div>

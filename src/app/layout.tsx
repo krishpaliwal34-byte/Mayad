@@ -8,7 +8,6 @@ import SearchModal from '@/components/SearchModal';
 import LoginModal from '@/components/LoginModal';
 import SubscribeModal from '@/components/SubscribeModal';
 import ConditionalLayout from '@/components/ConditionalLayout';
-import MobileBottomNav from '@/components/MobileBottomNav';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -205,14 +204,6 @@ export default function RootLayout({
             {children}
           </ConditionalLayout>
 
-          {/* ==================================================
-              MOBILE BOTTOM NAVIGATION
-              
-              Visible only on mobile.
-              Hidden automatically on sm and larger screens.
-          ================================================== */}
-
-          <MobileBottomNav />
 
           {/* ==================================================
               GLOBAL MODALS

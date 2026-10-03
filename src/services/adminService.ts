@@ -104,7 +104,7 @@ export interface AdminDashboardStats {
   totalMovies?: number;
   castingApplications: { count: number; connected: boolean; message: string };
   activeProjects: { count: number; connected: boolean; message: string };
-  newInquiries: { count: number; connected: boolean; message: string };
+  newInquiries: { count: number; pendingCount?: number; connected: boolean; message: string };
 }
 
 export interface AdminAnalyticsData {

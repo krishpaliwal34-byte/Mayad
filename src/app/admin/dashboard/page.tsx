@@ -36,6 +36,7 @@ import {
   BookOpen,
   Plus,
   UserPlus,
+  HelpCircle,
 } from 'lucide-react';
 import {
   adminService,
@@ -47,13 +48,11 @@ import {
 } from '@/services/adminService';
 import { MOVIES_LIST } from '@/data/movie';
 import AdminMoviesManagement from '@/components/AdminMoviesManagement';
-import AdminProjectsRoles from '@/components/AdminProjectsRoles';
-import AdminMediaModeration from '@/components/AdminMediaModeration';
 import AdminInquiriesManagement from '@/components/AdminInquiriesManagement';
-import AdminCareerManagement from '@/components/AdminCareerManagement';
 import AdminBlogsManagement from '@/components/AdminBlogsManagement';
 import AdminAddArtistManagement from '@/components/AdminAddArtistManagement';
 import AdminTalentApplications from '@/components/AdminTalentApplications';
+import AdminFaqManagement from '@/components/AdminFaqManagement';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -62,7 +61,7 @@ export default function AdminDashboardPage() {
   const [authLoading, setAuthLoading] = useState(true);
   // Layout State
   const [activeTab, setActiveTab] = useState<
-   'overview' | 'movies' | 'media' | 'artists' | 'talent-applications' | 'add-artist' | 'projects-roles' | 'career' | 'blogs' | 'inquiries' | 'profile' | 'settings'
+   'overview' | 'movies' | 'artists' | 'talent-applications' | 'add-artist' | 'blogs' | 'inquiries' | 'faq' | 'profile' | 'settings'
   >('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -380,14 +379,12 @@ export default function AdminDashboardPage() {
           {[
             { id: 'overview', label: 'Overview', icon: LayoutDashboard },
             { id: 'movies', label: 'Movies Management', icon: Film },
-            { id: 'media', label: 'Media Moderation', icon: Camera },
             { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
             { id: 'talent-applications', label: 'Talent Applications', icon: Award },
             { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
-            { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
-            { id: 'career', label: 'Career Management', icon: Briefcase },
             { id: 'blogs', label: 'Blogs Management', icon: BookOpen },
             { id: 'inquiries', label: 'Contacts / Inquiries', icon: MessageSquare },
+            { id: 'faq', label: 'FAQ Management', icon: HelpCircle },
             { id: 'profile', label: 'Admin Profile', icon: ShieldCheck },
             { id: 'settings', label: 'Settings', icon: Settings },
           ].map((item) => {
@@ -467,14 +464,12 @@ export default function AdminDashboardPage() {
                 {[
                   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
                   { id: 'movies', label: 'Movies Management', icon: Film },
-                  { id: 'media', label: 'Media Moderation', icon: Camera },
                   { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
                   { id: 'talent-applications', label: 'Talent Applications', icon: Award },
                   { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
-                  { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
-                  { id: 'career', label: 'Career Management', icon: Briefcase },
                   { id: 'blogs', label: 'Blogs Management', icon: BookOpen },
                   { id: 'inquiries', label: 'Contacts / Inquiries', icon: MessageSquare },
+                  { id: 'faq', label: 'FAQ Management', icon: HelpCircle },
                   { id: 'profile', label: 'Admin Profile', icon: ShieldCheck },
                   { id: 'settings', label: 'Settings', icon: Settings },
                 ].map((item) => {
@@ -532,14 +527,12 @@ export default function AdminDashboardPage() {
               <h2 className="text-base sm:text-lg font-bold text-white capitalize">
                 {activeTab === 'overview' && 'Dashboard Overview'}
                 {activeTab === 'movies' && 'Movies & Series Management'}
-                {activeTab === 'media' && 'Artist Media Moderation'}
                 {activeTab === 'artists' && 'Artist Directory & Approvals'}
                 {activeTab === 'talent-applications' && 'Talent Applications (Join MAYAD)'}
                 {activeTab === 'add-artist' && 'Add Artist & Directory Management'}
-                {activeTab === 'projects-roles' && 'Projects & Roles'}
-                {activeTab === 'career' && 'Career Management'}
                 {activeTab === 'blogs' && 'Blogs & Articles Management'}
                 {activeTab === 'inquiries' && 'Contacts & Inquiries'}
+                {activeTab === 'faq' && 'FAQ Management'}
                 {activeTab === 'profile' && 'Administrator Profile'}
                 {activeTab === 'settings' && 'System Settings'}
               </h2>
@@ -638,42 +631,25 @@ export default function AdminDashboardPage() {
                     </p>
                   </div>
                 </motion.div>
-                {/* 3. Pending Approvals */}
+                {/* New Inquiries (Real Count) */}
                 <motion.div
                   whileHover={{ y: -3 }}
-                  className="rounded-2xl bg-[#090d1f]/90 border border-amber-400/30 p-5 relative overflow-hidden shadow-[0_4px_25px_rgba(0,0,0,0.4)]"
+                  onClick={() => setActiveTab('inquiries')}
+                  className="rounded-2xl bg-[#090d1f]/90 border border-cyan-500/20 p-5 relative overflow-hidden shadow-[0_4px_25px_rgba(0,0,0,0.4)] cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-300">Pending Approvals</span>
-                    <div className="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 animate-pulse">
-                      <Clock className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <span className="text-3xl sm:text-4xl font-extrabold text-amber-400">
-                      {dataLoading ? '...' : stats?.pendingApprovals ?? 0}
-                    </span>
-                    <p className="text-xs text-amber-300/80 mt-1">
-                      Requires administrator review
-                    </p>
-                  </div>
-                </motion.div>
-                {/* 6. New Inquiries */}
-                <motion.div
-                  whileHover={{ y: -3 }}
-                  className="rounded-2xl bg-[#090d1f]/90 border border-white/10 p-5 relative overflow-hidden shadow-[0_4px_25px_rgba(0,0,0,0.4)] opacity-90"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">New Inquiries</span>
-                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <span className="text-xs font-bold uppercase tracking-wider text-cyan-300">New Inquiries</span>
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                       <MessageSquare className="w-5 h-5" />
                     </div>
                   </div>
                   <div className="mt-3">
-                    <span className="text-3xl sm:text-4xl font-extrabold text-slate-300">0</span>
-                    <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5 text-slate-400" />
-                      <span>No inquiries DB connected</span>
+                    <span className="text-3xl sm:text-4xl font-extrabold text-cyan-300">
+                      {dataLoading ? '...' : (stats?.newInquiries?.count ?? 0)}
+                    </span>
+                    <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Submitted via Contact Us page</span>
                     </p>
                   </div>
                 </motion.div>
@@ -869,9 +845,6 @@ export default function AdminDashboardPage() {
           ===================================================== */}
           {activeTab === 'movies' && (
             <AdminMoviesManagement showToast={showToast} onStatsUpdate={loadDashboardStats} />
-          )}
-          {activeTab === 'media' && (
-            <AdminMediaModeration />
           )}
           {/* =====================================================
               TAB: TALENT APPLICATIONS (JOIN MAYAD)
@@ -1078,18 +1051,6 @@ export default function AdminDashboardPage() {
             <AdminAddArtistManagement showToast={showToast} onStatsUpdate={loadDashboardStats} />
           )}
           {/* =====================================================
-              TAB: PROJECTS & ROLES
-          ===================================================== */}
-          {activeTab === 'projects-roles' && (
-            <AdminProjectsRoles showToast={showToast} onStatsUpdate={loadDashboardStats} />
-          )}
-          {/* =====================================================
-              TAB: CAREER MANAGEMENT
-          ===================================================== */}
-          {activeTab === 'career' && (
-            <AdminCareerManagement />
-          )}
-          {/* =====================================================
               TAB: BLOGS MANAGEMENT
           ===================================================== */}
           {activeTab === 'blogs' && (
@@ -1100,6 +1061,12 @@ export default function AdminDashboardPage() {
           ===================================================== */}
           {activeTab === 'inquiries' && (
             <AdminInquiriesManagement />
+          )}
+          {/* =====================================================
+              TAB: FAQ MANAGEMENT
+          ===================================================== */}
+          {activeTab === 'faq' && (
+            <AdminFaqManagement showToast={showToast} />
           )}
           {/* =====================================================
               TAB: ADMIN PROFILE

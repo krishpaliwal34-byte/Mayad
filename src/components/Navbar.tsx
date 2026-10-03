@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -9,13 +9,7 @@ import {
   Search,
   Menu,
   X,
-  ChevronRight,
-  ChevronDown,
   Globe,
-  BookOpen,
-  Landmark,
-  Images,
-  UserRound,
   ArrowUpRight,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -24,11 +18,8 @@ import { getBackendUrl } from '@/utils/config';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
-  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [artistPhoto, setArtistPhoto] = useState<string | null>(null);
 
-  const moreRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -103,22 +94,6 @@ export default function Navbar() {
   }, []);
 
   // ============================================================
-  // CLOSE DROPDOWN ON OUTSIDE CLICK
-  // ============================================================
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (moreRef.current && !moreRef.current.contains(target)) {
-        setMoreOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  // ============================================================
   // NAV LINKS
   // ============================================================
   const navLinks = [
@@ -127,21 +102,14 @@ export default function Navbar() {
     { name: t('movies'), href: '/movies' },
     { name: t('artists'), href: '/artists' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Media', href: '/media' },
-    { name: 'DP Singh Basni', href: '/founder' },
-    { name: 'Career', href: '/careers' },
+    { name: 'Blogs', href: '/blogs' },
+    { name: 'Culture', href: '/culture' },
+    { name: 'Founder', href: '/founder' },
+     { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '/contact' },
+
   ];
 
-  // ============================================================
-  // MORE LINKS
-  // ============================================================
-  const moreLinks = [
-    { name: 'Blogs', href: '/blogs', icon: BookOpen },
-    { name: 'Culture', href: '/culture', icon: Landmark },
-  ];
-
-  const isMoreActive = moreLinks.some((item) => pathname === item.href);
   const isJoinActive = pathname === '/register';
 
   return (
@@ -192,71 +160,6 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-
-              {/* MORE DROPDOWN */}
-              <div
-                ref={moreRef}
-                className="relative"
-                onMouseEnter={() => setMoreOpen(true)}
-                onMouseLeave={() => setMoreOpen(false)}
-              >
-                <button
-                  type="button"
-                  onClick={() => setMoreOpen(!moreOpen)}
-                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors ${
-                    isMoreActive || moreOpen
-                      ? 'bg-white/5 font-semibold text-mayad-gold'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  <span>More</span>
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      moreOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                <AnimatePresence>
-                  {moreOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute left-0 top-full mt-2 w-52 overflow-hidden rounded-xl border border-white/10 p-2 shadow-2xl backdrop-blur-2xl"
-                      style={{
-                        background: 'rgba(10, 15, 20, 0.97)',
-                        backdropFilter: 'blur(24px)',
-                        WebkitBackdropFilter: 'blur(24px)',
-                      }}
-                    >
-                      {moreLinks.map((item) => {
-                        const Icon = item.icon;
-                        const active = pathname === item.href;
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setMoreOpen(false)}
-                            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
-                              active
-                                ? 'bg-mayad-gold text-black'
-                                : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                            }`}
-                          >
-                            <Icon
-                              className={`h-4 w-4 ${active ? 'text-black' : 'text-mayad-gold'}`}
-                            />
-                            <span>{item.name}</span>
-                            <ChevronRight className="ml-auto h-4 w-4 opacity-50" />
-                          </Link>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
             </nav>
           </div>
 
@@ -310,27 +213,6 @@ export default function Navbar() {
               <span>Join MAYAD</span>
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
-
-            {/* ARTIST ACCOUNT */}
-            {/* <button
-              type="button"
-              onClick={handleArtistAccount}
-              aria-label="Artist Login or Dashboard"
-              title="Artist Login / Dashboard"
-              className="group relative inline-flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#D4AF37]/50 bg-gradient-to-br from-[#D4AF37]/20 via-[#D4AF37]/10 to-transparent text-[#F5D77A] shadow-[0_0_20px_rgba(212,175,55,0.08)] backdrop-blur-xl transition-all duration-300 hover:border-[#F5D77A] hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] active:scale-95"
-            >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full z-10" />
-              {artistPhoto ? (
-                <img
-                  src={artistPhoto}
-                  alt="Artist Profile"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  onError={() => setArtistPhoto(null)}
-                />
-              ) : (
-                <UserRound className="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-              )}
-            </button> */}
           </div>
 
           {/* MOBILE CONTROLS */}
@@ -360,26 +242,6 @@ export default function Navbar() {
             >
               <Search className="h-5 w-5" />
             </button>
-
-            {/* MOBILE ARTIST ACCOUNT */}
-            {/* <button
-              type="button"
-              onClick={handleArtistAccount}
-              aria-label="Artist Login or Dashboard"
-              title="Artist Login / Dashboard"
-              className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#F5D77A] transition-all duration-300 hover:border-[#F5D77A] active:scale-95"
-            >
-              {artistPhoto ? (
-                <img
-                  src={artistPhoto}
-                  alt="Artist Profile"
-                  className="h-full w-full object-cover"
-                  onError={() => setArtistPhoto(null)}
-                />
-              ) : (
-                <UserRound className="h-5 w-5" />
-              )}
-            </button> */}
 
             {/* MOBILE MENU TOGGLE */}
             <button
@@ -477,71 +339,6 @@ export default function Navbar() {
                     </Link>
                   );
                 })}
-
-                {/* MOBILE MORE */}
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setMobileMoreOpen(!mobileMoreOpen)}
-                    className={`flex w-full min-w-0 items-center justify-between rounded-xl px-4 py-3 text-base font-semibold leading-6 transition-colors ${
-                      isMoreActive || mobileMoreOpen
-                        ? 'bg-white/10 text-mayad-gold'
-                        : 'text-slate-200 hover:bg-white/10 hover:text-mayad-gold'
-                    }`}
-                  >
-                    <span className="flex min-w-0 items-center gap-2">
-                      <BookOpen className="h-5 w-5" />
-                      More
-                    </span>
-                    <ChevronDown
-                      className={`h-5 w-5 transition-transform duration-200 ${
-                        mobileMoreOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {mobileMoreOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mt-2 overflow-hidden rounded-xl border border-white/10"
-                        style={{
-                          background: 'rgba(10, 15, 20, 0.97)',
-                          backdropFilter: 'blur(24px)',
-                          WebkitBackdropFilter: 'blur(24px)',
-                        }}
-                      >
-                        {moreLinks.map((item) => {
-                          const Icon = item.icon;
-                          const active = pathname === item.href;
-                          return (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              onClick={() => {
-                                setMobileMoreOpen(false);
-                                setMobileMenuOpen(false);
-                              }}
-                              className={`flex w-full min-w-0 items-center gap-3 px-5 py-3 text-sm font-medium transition-colors ${
-                                active
-                                  ? 'bg-mayad-gold text-black'
-                                  : 'text-slate-300 hover:bg-white/10 hover:text-mayad-gold'
-                              }`}
-                            >
-                              <Icon
-                                className={`h-4 w-4 ${active ? 'text-black' : 'text-mayad-gold'}`}
-                              />
-                              {item.name}
-                              <ChevronRight className="ml-auto h-4 w-4 opacity-50" />
-                            </Link>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
               </nav>
             </div>
 
