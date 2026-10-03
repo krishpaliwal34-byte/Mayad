@@ -16,6 +16,7 @@ import {
   Landmark,
   Images,
   UserRound,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { getBackendUrl } from '@/utils/config';
@@ -141,6 +142,7 @@ export default function Navbar() {
   ];
 
   const isMoreActive = moreLinks.some((item) => pathname === item.href);
+  const isJoinActive = pathname === '/register';
 
   return (
     <>
@@ -201,7 +203,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setMoreOpen(!moreOpen)}
-                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors ${
                     isMoreActive || moreOpen
                       ? 'bg-white/5 font-semibold text-mayad-gold'
                       : 'text-slate-300 hover:bg-white/5 hover:text-white'
@@ -296,8 +298,21 @@ export default function Navbar() {
               </button>
             </div>
 
+            {/* JOIN MAYAD (outline pill, fills gold on hover) */}
+            <Link
+              href="/register"
+              className={`group inline-flex h-10 items-center gap-1.5 whitespace-nowrap rounded-full border px-4 text-[13px] font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-mayad-gold/60 active:scale-95 ${
+                isJoinActive
+                  ? 'border-mayad-gold bg-mayad-gold text-black'
+                  : 'border-mayad-gold/60 text-mayad-gold hover:border-mayad-gold hover:bg-mayad-gold hover:text-black'
+              }`}
+            >
+              <span>Join MAYAD</span>
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+
             {/* ARTIST ACCOUNT */}
-            <button
+            {/* <button
               type="button"
               onClick={handleArtistAccount}
               aria-label="Artist Login or Dashboard"
@@ -315,11 +330,19 @@ export default function Navbar() {
               ) : (
                 <UserRound className="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
               )}
-            </button>
+            </button> */}
           </div>
 
           {/* MOBILE CONTROLS */}
           <div className="flex shrink-0 items-center gap-1.5 md:hidden">
+            {/* MOBILE JOIN */}
+            <Link
+              href="/register"
+              className="inline-flex h-8 items-center whitespace-nowrap rounded-full border border-mayad-gold/60 px-3 text-[11px] font-semibold text-mayad-gold transition-all active:scale-95 active:bg-mayad-gold active:text-black"
+            >
+              Join
+            </Link>
+
             {/* MOBILE LANGUAGE */}
             <button
               onClick={() => setLanguage(language === 'ENG' ? 'RAJ' : 'ENG')}
@@ -339,7 +362,7 @@ export default function Navbar() {
             </button>
 
             {/* MOBILE ARTIST ACCOUNT */}
-            <button
+            {/* <button
               type="button"
               onClick={handleArtistAccount}
               aria-label="Artist Login or Dashboard"
@@ -356,7 +379,7 @@ export default function Navbar() {
               ) : (
                 <UserRound className="h-5 w-5" />
               )}
-            </button>
+            </button> */}
 
             {/* MOBILE MENU TOGGLE */}
             <button
@@ -521,6 +544,16 @@ export default function Navbar() {
                 </div>
               </nav>
             </div>
+
+            {/* MOBILE JOIN (full width, bottom of menu) */}
+            <Link
+              href="/register"
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-mayad-gold/60 px-4 py-3 text-base font-semibold text-mayad-gold transition-colors hover:bg-mayad-gold hover:text-black active:bg-mayad-gold active:text-black"
+            >
+              <span>Join MAYAD</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

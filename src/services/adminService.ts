@@ -56,6 +56,7 @@ export interface AdminArtistRecord {
   languages?: string[];
   bio: string;
   profilePhoto?: string;
+  imageUrl?: string;
   showreel?: string;
   imdb?: string;
   instagram?: string;
@@ -131,6 +132,56 @@ export interface AdminStatsResponse {
 export interface AdminArtistsResponse {
   success: boolean;
   artists: AdminArtistRecord[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
+}
+
+export interface AdminTalentApplicationRecord {
+  id: string;
+  _id?: string;
+  fullName: string;
+  age: number;
+  gender: string;
+  profilePhoto: string;
+  email: string;
+  preferredLanguage: string;
+  experienceLevel: string;
+  interestedRoles: string[];
+  yearsOfExperience?: string;
+  previousProjects?: string;
+  projectVideoUrls?: string[];
+  introductoryVideoUrl?: string;
+  aboutYourself?: string;
+  synopsisPdfUrl?: string;
+  whatsAppNumber: string;
+  callingNumber: string;
+  fullAddress: string;
+  city: string;
+  state: string;
+  country: string;
+  socialLink1?: string;
+  socialLink2?: string;
+  status: 'Pending' | 'Under Review' | 'Shortlisted' | 'Approved' | 'Rejected';
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface AdminTalentApplicationsResponse {
+  success: boolean;
+  count: number;
+  applications: AdminTalentApplicationRecord[];
+  stats: {
+    total: number;
+    pending: number;
+    underReview: number;
+    shortlisted: number;
+    approved: number;
+    rejected: number;
+  };
   pagination: {
     total: number;
     page: number;
@@ -269,6 +320,97 @@ export const adminService = {
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data?.message || 'Failed to load admin stats');
+    }
+    return data;
+  },
+
+  // PUBLIC ARTISTS METHODS (FOR ADD ARTIST TAB & /artists DIRECTORY)
+  getPublicArtists: async (): Promise<{ success: boolean; count: number; artists: AdminArtistRecord[] }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/public-artists`, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to fetch public artists');
+    }
+    return data;
+  },
+
+  createPublicArtist: async (payload: Partial<AdminArtistRecord>): Promise<{ success: boolean; message: string; artist: AdminArtistRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/public-artists`, {
+      method: 'POST',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to create public artist');
+    }
+    return data;
+  },
+
+  updatePublicArtist: async (id: string, payload: Partial<AdminArtistRecord>): Promise<{ success: boolean; message: string; artist: AdminArtistRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/public-artists/${id}`, {
+      method: 'PUT',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to update public artist');
+    }
+    return data;
+  },
+
+  deletePublicArtist: async (id: string): Promise<{ success: boolean; message: string }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/public-artists/${id}`, {
+      method: 'DELETE',
+      headers,
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to delete public artist');
     }
     return data;
   },
@@ -519,6 +661,117 @@ export const adminService = {
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data?.message || 'Failed to delete movie');
+    }
+    return data;
+  },
+
+  // 13. GET TALENT APPLICATIONS (ADMIN)
+  getTalentApplications: async (params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    role?: string;
+    experienceLevel?: string;
+    status?: string;
+  } = {}): Promise<AdminTalentApplicationsResponse> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+    if (params.search) queryParams.append('search', params.search);
+    if (params.role) queryParams.append('role', params.role);
+    if (params.experienceLevel) queryParams.append('experienceLevel', params.experienceLevel);
+    if (params.status) queryParams.append('status', params.status);
+
+    const response = await fetch(`${ADMIN_API_URL}/talent-applications?${queryParams.toString()}`, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to fetch talent applications');
+    }
+    return data;
+  },
+
+  // 14. GET TALENT APPLICATION DETAIL (ADMIN)
+  getTalentApplicationDetail: async (id: string): Promise<{ success: boolean; application: AdminTalentApplicationRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/talent-applications/${id}`, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to fetch application detail');
+    }
+    return data;
+  },
+
+  // 15. UPDATE TALENT APPLICATION STATUS (ADMIN)
+  updateTalentApplicationStatus: async (
+    id: string,
+    status: 'Pending' | 'Under Review' | 'Shortlisted' | 'Approved' | 'Rejected'
+  ): Promise<{ success: boolean; message: string; application: AdminTalentApplicationRecord }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/talent-applications/${id}/status`, {
+      method: 'PUT',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify({ status }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to update application status');
+    }
+    return data;
+  },
+
+  // 16. DELETE TALENT APPLICATION (ADMIN)
+  deleteTalentApplication: async (id: string): Promise<{ success: boolean; message: string }> => {
+    const token = getAdminToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${ADMIN_API_URL}/talent-applications/${id}`, {
+      method: 'DELETE',
+      headers,
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to delete talent application');
     }
     return data;
   },

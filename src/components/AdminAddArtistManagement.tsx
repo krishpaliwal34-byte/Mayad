@@ -67,16 +67,16 @@ export default function AdminAddArtistManagement({
     else alert(text);
   };
 
-  // Load All Artists for Admin
+  // Load All Public Artists for Admin
   const loadArtists = async () => {
     try {
       setLoading(true);
-      const res = await adminService.getArtists({ page: 1, limit: 100 });
+      const res = await adminService.getPublicArtists();
       if (res.success && Array.isArray(res.artists)) {
         setArtists(res.artists);
       }
     } catch (err: any) {
-      console.error('Error loading artists:', err);
+      console.error('Error loading public artists:', err);
       notify(err?.message || 'Failed to load artists data', 'error');
     } finally {
       setLoading(false);
@@ -144,7 +144,7 @@ export default function AdminAddArtistManagement({
       phone: artist.phone || '',
       location: artist.location || 'Rajasthan',
       experience: artist.experience || '5+ Years',
-      profilePhoto: artist.profilePhoto || '',
+      profilePhoto: artist.profilePhoto || artist.imageUrl || '',
       bio: artist.bio || '',
       languagesText: (artist.languages || []).join(', ') || 'Rajasthani, Hindi',
       showreel: artist.showreel || '',
@@ -180,6 +180,7 @@ export default function AdminAddArtistManagement({
         location: formData.location,
         experience: formData.experience,
         profilePhoto: formData.profilePhoto,
+        imageUrl: formData.profilePhoto,
         bio: formData.bio,
         languages: languagesArr,
         showreel: formData.showreel,
@@ -188,7 +189,7 @@ export default function AdminAddArtistManagement({
       };
 
       if (editingArtist) {
-        const res = await adminService.updateArtist(editingArtist.id, payload);
+        const res = await adminService.updatePublicArtist(editingArtist.id, payload);
         if (res.success) {
           notify('Artist details updated successfully!');
           setIsModalOpen(false);
@@ -198,7 +199,7 @@ export default function AdminAddArtistManagement({
           notify(res.message || 'Failed to update artist details', 'error');
         }
       } else {
-        const res = await adminService.createArtist(payload);
+        const res = await adminService.createPublicArtist(payload);
         if (res.success) {
           notify('Artist created and published to /artists directory!');
           setIsModalOpen(false);
@@ -222,7 +223,7 @@ export default function AdminAddArtistManagement({
 
     try {
       setDeleteLoading(true);
-      const res = await adminService.deleteArtist(artistToDelete.id);
+      const res = await adminService.deletePublicArtist(artistToDelete.id);
       if (res.success) {
         notify('Artist profile deleted successfully');
         setArtistToDelete(null);

@@ -53,6 +53,8 @@ import AdminInquiriesManagement from '@/components/AdminInquiriesManagement';
 import AdminCareerManagement from '@/components/AdminCareerManagement';
 import AdminBlogsManagement from '@/components/AdminBlogsManagement';
 import AdminAddArtistManagement from '@/components/AdminAddArtistManagement';
+import AdminTalentApplications from '@/components/AdminTalentApplications';
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   // Admin Profile & Auth State
@@ -60,7 +62,7 @@ export default function AdminDashboardPage() {
   const [authLoading, setAuthLoading] = useState(true);
   // Layout State
   const [activeTab, setActiveTab] = useState<
-   'overview' | 'movies' | 'media' | 'artists' | 'add-artist' | 'projects-roles' | 'career' | 'blogs' | 'inquiries' | 'profile' | 'settings'
+   'overview' | 'movies' | 'media' | 'artists' | 'talent-applications' | 'add-artist' | 'projects-roles' | 'career' | 'blogs' | 'inquiries' | 'profile' | 'settings'
   >('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -380,6 +382,7 @@ export default function AdminDashboardPage() {
             { id: 'movies', label: 'Movies Management', icon: Film },
             { id: 'media', label: 'Media Moderation', icon: Camera },
             { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
+            { id: 'talent-applications', label: 'Talent Applications', icon: Award },
             { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
             { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
             { id: 'career', label: 'Career Management', icon: Briefcase },
@@ -466,6 +469,7 @@ export default function AdminDashboardPage() {
                   { id: 'movies', label: 'Movies Management', icon: Film },
                   { id: 'media', label: 'Media Moderation', icon: Camera },
                   { id: 'artists', label: 'Artists Accounts', icon: Users, badge: stats?.pendingApprovals },
+                  { id: 'talent-applications', label: 'Talent Applications', icon: Award },
                   { id: 'add-artist', label: 'Add Artist', icon: UserPlus },
                   { id: 'projects-roles', label: 'Projects & Roles', icon: FolderKanban },
                   { id: 'career', label: 'Career Management', icon: Briefcase },
@@ -530,6 +534,7 @@ export default function AdminDashboardPage() {
                 {activeTab === 'movies' && 'Movies & Series Management'}
                 {activeTab === 'media' && 'Artist Media Moderation'}
                 {activeTab === 'artists' && 'Artist Directory & Approvals'}
+                {activeTab === 'talent-applications' && 'Talent Applications (Join MAYAD)'}
                 {activeTab === 'add-artist' && 'Add Artist & Directory Management'}
                 {activeTab === 'projects-roles' && 'Projects & Roles'}
                 {activeTab === 'career' && 'Career Management'}
@@ -867,6 +872,12 @@ export default function AdminDashboardPage() {
           )}
           {activeTab === 'media' && (
             <AdminMediaModeration />
+          )}
+          {/* =====================================================
+              TAB: TALENT APPLICATIONS (JOIN MAYAD)
+          ===================================================== */}
+          {activeTab === 'talent-applications' && (
+            <AdminTalentApplications showToast={showToast} onStatsUpdate={loadDashboardStats} />
           )}
           {/* =====================================================
               TAB 2: ARTISTS MANAGEMENT DIRECTORY

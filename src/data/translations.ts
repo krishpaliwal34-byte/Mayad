@@ -54,7 +54,7 @@ export const translations = {
     taglineDescription: 'Experience the heart of Rajasthan through powerful stories, films, music and original entertainment.',
 
     // Home Sections & Subheadings
-    trendingMovies: 'Trending On Mayad',
+    trendingMovies: 'Movies On MAYAD OTT',
     trendingSubtitle: 'Handpicked blockbuster cinema and popular releases from Rajasthan',
     mostLikedMovies: 'Most Liked Movies',
     mostLikedSubtitle: 'Top rated Rajasthani movies loved by audiences',
